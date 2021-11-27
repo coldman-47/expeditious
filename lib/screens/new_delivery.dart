@@ -12,17 +12,18 @@ class NewDelivery extends StatelessWidget {
             image: DecorationImage(
                 image: AssetImage('images/bg.jpg'), fit: BoxFit.cover)),
         child: Scaffold(
+            backgroundColor: Colors.transparent,
             appBar: AppBar(
+                backgroundColor: Colors.transparent,
                 title: const Text('NRJExpress'),
                 centerTitle: true,
                 elevation: 0),
             body: Container(
-                color: Colors.transparent,
                 constraints: BoxConstraints.expand(),
                 padding: const EdgeInsets.all(25),
                 child: Container(
                     padding: EdgeInsets.all(10),
-                    width: 500,
+                    width: 400,
                     child: Stack(
                         clipBehavior: Clip.none,
                         alignment: Alignment.topCenter,
@@ -31,7 +32,7 @@ class NewDelivery extends StatelessWidget {
                               child: Container(
                                   padding: EdgeInsets.all(35),
                                   decoration: BoxDecoration(
-                                      color: Colors.grey[600],
+                                      color: Colors.orange[600],
                                       borderRadius: BorderRadius.circular(15)),
                                   height: 150,
                                   width: 400,
@@ -53,31 +54,43 @@ class NewDelivery extends StatelessWidget {
                                     decoration: BoxDecoration(
                                         borderRadius:
                                             BorderRadius.circular(30)),
-                                    child: livraisonCtrl()),
+                                    child: LivraisonCtrl()),
                               ))
                         ])))));
   }
 }
 
-Widget livraisonCtrl() {
-  Widget screenChild = Vehicles();
-  var log = new Logger();
-  log.d(screenChild.toString());
-  return Container(
-      padding: EdgeInsets.all(15),
-      child: Column(children: [
-        Row(children: [
-          CircleAvatar(
-            radius: 25,
-            backgroundColor: Colors.amber[100],
-            child: CircleAvatar(
-                backgroundColor: Colors.amber[500], child: const Text('1')),
-          ),
-          const SizedBox(width: 16),
-          const Text('Type de transport pour votre colis',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600))
-        ]),
-        const Divider(color: Colors.transparent),
-        const LinearProgressIndicator(value: 0.25, color: Colors.red)
-      ]));
+class LivraisonCtrl extends StatefulWidget {
+  const LivraisonCtrl({Key? key}) : super(key: key);
+
+  @override
+  _LivraisonCtrlState createState() => _LivraisonCtrlState();
+}
+
+class _LivraisonCtrlState extends State<LivraisonCtrl> {
+  @override
+  Widget build(BuildContext context) {
+    late Vehicles vehic;
+
+    vehic = Vehicles();
+
+    return SingleChildScrollView(
+        padding: EdgeInsets.all(15),
+        child: Column(children: [
+          Row(children: [
+            CircleAvatar(
+              radius: 25,
+              backgroundColor: Colors.amber[100],
+              child: CircleAvatar(
+                  backgroundColor: Colors.amber[500], child: Text(vehic.index)),
+            ),
+            const SizedBox(width: 16),
+            Text(vehic.title,
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600))
+          ]),
+          const Divider(color: Colors.transparent),
+          LinearProgressIndicator(value: vehic.stepValue, color: Colors.red),
+          vehic
+        ]));
+  }
 }

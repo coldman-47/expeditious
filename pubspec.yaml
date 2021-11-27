@@ -64,6 +64,9 @@ flutter:
     - images/bg.jpg
     - images/smartphone.png
     - images/2fa.png
+    - images/bike.png
+    - images/van.png
+    - images/tricycle.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
