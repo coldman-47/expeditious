@@ -21,6 +21,9 @@ class _VehiclesState extends State<Vehicles> {
         child: Column(children: [
           ButtonBar(alignment: MainAxisAlignment.center, children: [
             ElevatedButton(
+                style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.blue.shade100)),
                 onPressed: () {},
                 child: Container(
                     height: 150,
@@ -31,6 +34,9 @@ class _VehiclesState extends State<Vehicles> {
                             fit: BoxFit.contain)))),
             SizedBox(height: 15),
             ElevatedButton(
+                style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.blue.shade100)),
                 onPressed: () {},
                 child: Container(
                     height: 150,
@@ -41,6 +47,9 @@ class _VehiclesState extends State<Vehicles> {
                             fit: BoxFit.contain)))),
             SizedBox(height: 15),
             ElevatedButton(
+                style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.blue.shade100)),
                 onPressed: () {},
                 child: Container(
                     height: 150,

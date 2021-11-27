@@ -22,20 +22,20 @@ class NewDelivery extends StatelessWidget {
                 constraints: BoxConstraints.expand(),
                 padding: const EdgeInsets.all(25),
                 child: Container(
-                    padding: EdgeInsets.all(10),
-                    width: 400,
+                    padding: EdgeInsets.all(5),
+                    width: 350,
                     child: Stack(
                         clipBehavior: Clip.none,
                         alignment: Alignment.topCenter,
                         children: [
                           Positioned(
                               child: Container(
-                                  padding: EdgeInsets.all(35),
+                                  padding: EdgeInsets.all(20),
                                   decoration: BoxDecoration(
                                       color: Colors.orange[600],
                                       borderRadius: BorderRadius.circular(15)),
                                   height: 150,
-                                  width: 400,
+                                  width: 350,
                                   child: const Text('DEMANDER UNE LIVRAISON',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
@@ -43,14 +43,14 @@ class NewDelivery extends StatelessWidget {
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold)))),
                           Positioned(
-                              top: 85,
+                              top: 60,
                               child: Card(
                                 elevation: 5,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(30)),
                                 child: Container(
                                     height: 500,
-                                    width: 400,
+                                    width: 350,
                                     decoration: BoxDecoration(
                                         borderRadius:
                                             BorderRadius.circular(30)),
@@ -85,8 +85,10 @@ class _LivraisonCtrlState extends State<LivraisonCtrl> {
                   backgroundColor: Colors.amber[500], child: Text(vehic.index)),
             ),
             const SizedBox(width: 16),
-            Text(vehic.title,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600))
+            Expanded(
+                child: Text(vehic.title,
+                    style:
+                        TextStyle(fontSize: 16, fontWeight: FontWeight.w600))),
           ]),
           const Divider(color: Colors.transparent),
           LinearProgressIndicator(value: vehic.stepValue, color: Colors.red),
