@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 
 class Vehicles extends StatefulWidget {
   final String title = 'Type de transport';
-  final String index = '1';
+  final int index = 1;
   final double stepValue = 0.33;
+  final ValueChanged<int> progress;
 
-  const Vehicles({Key? key}) : super(key: key);
+  const Vehicles({Key? key, required this.progress}) : super(key: key);
 
   @override
   _VehiclesState createState() => _VehiclesState();
@@ -22,7 +23,9 @@ class _VehiclesState extends State<Vehicles> {
                 style: ButtonStyle(
                     backgroundColor:
                         MaterialStateProperty.all<Color>(Colors.blue.shade100)),
-                onPressed: () {},
+                onPressed: () {
+                  widget.progress(3);
+                },
                 child: Container(
                     height: 150,
                     width: 175,
@@ -35,7 +38,9 @@ class _VehiclesState extends State<Vehicles> {
                 style: ButtonStyle(
                     backgroundColor:
                         MaterialStateProperty.all<Color>(Colors.blue.shade100)),
-                onPressed: () {},
+                onPressed: () {
+                  widget.progress(3);
+                },
                 child: Container(
                     height: 150,
                     width: 175,
@@ -48,7 +53,9 @@ class _VehiclesState extends State<Vehicles> {
                 style: ButtonStyle(
                     backgroundColor:
                         MaterialStateProperty.all<Color>(Colors.blue.shade100)),
-                onPressed: () {},
+                onPressed: () {
+                  widget.progress(3);
+                },
                 child: Container(
                     height: 150,
                     width: 175,
