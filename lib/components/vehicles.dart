@@ -1,13 +1,11 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 
 class Vehicles extends StatefulWidget {
-  final String title = 'Type de transport pour votre colis';
+  final String title = 'Type de transport';
   final String index = '1';
   final double stepValue = 0.33;
 
-  Vehicles({Key? key}) : super(key: key);
+  const Vehicles({Key? key}) : super(key: key);
 
   @override
   _VehiclesState createState() => _VehiclesState();
@@ -17,10 +15,13 @@ class _VehiclesState extends State<Vehicles> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Column(children: [
           ButtonBar(alignment: MainAxisAlignment.center, children: [
             ElevatedButton(
+                style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.blue.shade100)),
                 onPressed: () {},
                 child: Container(
                     height: 150,
@@ -31,6 +32,9 @@ class _VehiclesState extends State<Vehicles> {
                             fit: BoxFit.contain)))),
             SizedBox(height: 15),
             ElevatedButton(
+                style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.blue.shade100)),
                 onPressed: () {},
                 child: Container(
                     height: 150,
@@ -41,6 +45,9 @@ class _VehiclesState extends State<Vehicles> {
                             fit: BoxFit.contain)))),
             SizedBox(height: 15),
             ElevatedButton(
+                style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.blue.shade100)),
                 onPressed: () {},
                 child: Container(
                     height: 150,

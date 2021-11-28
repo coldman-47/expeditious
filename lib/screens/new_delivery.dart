@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import 'package:nrj_express/components/adresses.dart';
 import 'package:nrj_express/components/vehicles.dart';
 
 class NewDelivery extends StatelessWidget {
@@ -15,42 +18,47 @@ class NewDelivery extends StatelessWidget {
             backgroundColor: Colors.transparent,
             appBar: AppBar(
                 backgroundColor: Colors.transparent,
-                title: const Text('NRJExpress'),
+                title: const Image(
+                    image: AssetImage('images/logo.png'),
+                    fit: BoxFit.contain,
+                    height: 75,
+                    width: 250),
                 centerTitle: true,
                 elevation: 0),
             body: Container(
                 constraints: BoxConstraints.expand(),
-                padding: const EdgeInsets.all(25),
+                padding: const EdgeInsets.symmetric(
+                    vertical: 10, horizontal: 25), //.all(25),
                 child: Container(
-                    padding: EdgeInsets.all(10),
-                    width: 400,
+                    padding: EdgeInsets.all(5),
+                    width: 350,
                     child: Stack(
                         clipBehavior: Clip.none,
                         alignment: Alignment.topCenter,
                         children: [
                           Positioned(
                               child: Container(
-                                  padding: EdgeInsets.all(35),
+                                  padding: EdgeInsets.all(20),
                                   decoration: BoxDecoration(
-                                      color: Colors.orange[600],
+                                      color: Colors.blueGrey[900],
                                       borderRadius: BorderRadius.circular(15)),
                                   height: 150,
-                                  width: 400,
+                                  width: 350,
                                   child: const Text('DEMANDER UNE LIVRAISON',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           color: Colors.white,
-                                          fontSize: 20,
+                                          fontSize: 18,
+                                          letterSpacing: 1,
                                           fontWeight: FontWeight.bold)))),
                           Positioned(
-                              top: 85,
+                              top: 60,
                               child: Card(
                                 elevation: 5,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(30)),
                                 child: Container(
-                                    height: 500,
-                                    width: 400,
+                                    width: 350,
                                     decoration: BoxDecoration(
                                         borderRadius:
                                             BorderRadius.circular(30)),
@@ -68,29 +76,60 @@ class LivraisonCtrl extends StatefulWidget {
 }
 
 class _LivraisonCtrlState extends State<LivraisonCtrl> {
+  double _progress = 0;
+
+  void startTimer() {
+    new Timer.periodic(
+      Duration(seconds: 1),
+      (Timer timer) => setState(
+        () {
+          if (_progress == 1) {
+            timer.cancel();
+          } else {
+            _progress += 0.2;
+          }
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     late Vehicles vehic;
+    late Adresses loc;
 
     vehic = Vehicles();
+    loc = Adresses();
 
-    return SingleChildScrollView(
-        padding: EdgeInsets.all(15),
-        child: Column(children: [
-          Row(children: [
+    return Column(children: [
+      Container(
+          padding: EdgeInsets.all(10),
+          child: Row(children: [
             CircleAvatar(
               radius: 25,
-              backgroundColor: Colors.amber[100],
+              backgroundColor: Colors.blueGrey[100],
               child: CircleAvatar(
-                  backgroundColor: Colors.amber[500], child: Text(vehic.index)),
+                  backgroundColor: Colors.blueGrey[900],
+                  child: Text(loc.index,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 22))),
             ),
             const SizedBox(width: 16),
-            Text(vehic.title,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600))
-          ]),
-          const Divider(color: Colors.transparent),
-          LinearProgressIndicator(value: vehic.stepValue, color: Colors.red),
-          vehic
-        ]));
+            Expanded(
+                child: Text(loc.title,
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black54))),
+          ])),
+      LinearProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.orange),
+          value: loc.stepValue,
+          minHeight: 2),
+      Container(
+          height: 450, child: Center(child: SingleChildScrollView(child: loc)))
+    ]);
   }
 }
