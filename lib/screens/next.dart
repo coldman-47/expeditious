@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
-import 'package:nrj_express/components/vehicles.dart';
+import 'package:nrj_express/components/choix.dart';
 
-class NewDelivery extends StatelessWidget {
-  const NewDelivery({Key? key}) : super(key: key);
+class Next extends StatelessWidget {
+  const Next({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -70,9 +69,9 @@ class LivraisonCtrl extends StatefulWidget {
 class _LivraisonCtrlState extends State<LivraisonCtrl> {
   @override
   Widget build(BuildContext context) {
-    late Vehicles vehic;
+    late Choix option;
 
-    vehic = const Vehicles();
+   option = const Choix();
 
     return SingleChildScrollView(
         padding: const EdgeInsets.all(15),
@@ -82,15 +81,19 @@ class _LivraisonCtrlState extends State<LivraisonCtrl> {
               radius: 25,
               backgroundColor: Colors.amber[100],
               child: CircleAvatar(
-                  backgroundColor: Colors.amber[500], child: Text(vehic.index)),
+                  backgroundColor: Colors.amber[500]),
             ),
             const SizedBox(width: 16),
-            Text(vehic.title,
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600))
+          
           ]),
           const Divider(color: Colors.transparent),
-          LinearProgressIndicator(value: vehic.stepValue, color: Colors.red),
-          vehic
+          LinearProgressIndicator(value: option.stepValue, color: Colors.red),
+         option
         ]));
   }
 }
+
+
+
+
+
