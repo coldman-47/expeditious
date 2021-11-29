@@ -22,14 +22,7 @@ class _VehiclesState extends State<Vehicles> {
         child: Column(children: [
           ButtonBar(alignment: MainAxisAlignment.center, children: [
             ElevatedButton(
-                onPressed: () {
-                   Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const Next()));
-                                  
-                },
+                onPressed: () {},
                 child: Container(
                     height: 150,
                     width: 175,
@@ -39,14 +32,7 @@ class _VehiclesState extends State<Vehicles> {
                             fit: BoxFit.contain)))),
             const SizedBox(height: 15),
             ElevatedButton(
-                onPressed: () {
-                   Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const Next()));
-                                  
-                },
+                onPressed: () {},
                 child: Container(
                     height: 150,
                     width: 175,
@@ -56,14 +42,7 @@ class _VehiclesState extends State<Vehicles> {
                             fit: BoxFit.contain)))),
             const SizedBox(height: 15),
             ElevatedButton(
-                onPressed: () {
-                   Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const Next()));
-                                  
-                },
+                onPressed: () {},
                 child: Container(
                     height: 150,
                     width: 175,
