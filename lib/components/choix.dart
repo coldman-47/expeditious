@@ -69,7 +69,7 @@ class _ChoixState extends State<Choix> {
         children:[
          Material(
                elevation: 8,
-               shape: const CircleBorder(),
+               borderRadius: BorderRadius.circular(20),
                clipBehavior: Clip.antiAliasWithSaveLayer,
                child:  InkWell(
                  splashColor: Colors.black12,
