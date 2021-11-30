@@ -22,7 +22,7 @@ class _ChoixState extends State<Choix> {
         Row(
         children:[
          Material(
-               elevation: 8,
+               elevation: 6,
                shape: const CircleBorder(),
                clipBehavior: Clip.antiAliasWithSaveLayer,
                child:  InkWell(
@@ -46,7 +46,7 @@ class _ChoixState extends State<Choix> {
         Row(
         children:[
          Material(
-               elevation: 8,
+               elevation: 6,
                shape: const CircleBorder(),
                clipBehavior: Clip.antiAliasWithSaveLayer,
                child:  InkWell(
@@ -68,7 +68,7 @@ class _ChoixState extends State<Choix> {
         Row(
         children:[
          Material(
-               elevation: 8,
+               elevation: 6,
                borderRadius: BorderRadius.circular(20),
                clipBehavior: Clip.antiAliasWithSaveLayer,
                child:  InkWell(
@@ -81,7 +81,7 @@ class _ChoixState extends State<Choix> {
                               fit: BoxFit.cover,),
                               )
                        ),
-         const Spacer(),
+      
          const Text('Remplir le formulaire',   
                     style: TextStyle(
                     height: 18,  
