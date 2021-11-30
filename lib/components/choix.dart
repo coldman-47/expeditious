@@ -22,7 +22,6 @@ class _ChoixState extends State<Choix> {
         Row(
         children:[
          Material(
-               color: Colors.green,
                elevation: 8,
                shape: const CircleBorder(),
                clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -47,7 +46,6 @@ class _ChoixState extends State<Choix> {
         Row(
         children:[
          Material(
-               color: Colors.green,
                elevation: 8,
                shape: const CircleBorder(),
                clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -70,7 +68,6 @@ class _ChoixState extends State<Choix> {
         Row(
         children:[
          Material(
-               color: Colors.blue,
                elevation: 8,
                shape: const CircleBorder(),
                clipBehavior: Clip.antiAliasWithSaveLayer,
