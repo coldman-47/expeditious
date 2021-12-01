@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../screens/screens.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
 class Adresses extends StatefulWidget {
@@ -74,7 +74,12 @@ class _AdressesState extends State<Adresses> {
                         padding: const EdgeInsets.all(20),
                         backgroundColor: Colors.orange,
                         primary: Colors.white),
-                    onPressed: () {}))
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const RecordScreen()));
+                    }))
           ],
         ));
   }
