@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:nrj_express/screens/next.dart';
 
 class Vehicles extends StatefulWidget {
   final String title = 'Type de transport';
