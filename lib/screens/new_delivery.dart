@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:nrj_express/components/adresses.dart';
 import 'package:nrj_express/components/vehicles.dart';
+import 'package:nrj_express/components/choix.dart';
 
 class NewDelivery extends StatelessWidget {
   const NewDelivery({Key? key}) : super(key: key);
@@ -61,7 +62,7 @@ class NewDelivery extends StatelessWidget {
                                     decoration: BoxDecoration(
                                         borderRadius:
                                             BorderRadius.circular(30)),
-                                    child: LivraisonCtrl()),
+                                    child: const LivraisonCtrl()),
                               ))
                         ])))));
   }
@@ -76,7 +77,6 @@ class LivraisonCtrl extends StatefulWidget {
 
 class _LivraisonCtrlState extends State<LivraisonCtrl> {
   double _progress = 0;
-
   void startTimer() {
     new Timer.periodic(
       Duration(seconds: 1),

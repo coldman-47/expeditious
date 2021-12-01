@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nrj_express/screens/next.dart';
 
 class Vehicles extends StatefulWidget {
   final String title = 'Type de transport';
@@ -33,7 +34,7 @@ class _VehiclesState extends State<Vehicles> {
                         image: DecorationImage(
                             image: AssetImage('images/bike.png'),
                             fit: BoxFit.contain)))),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
             ElevatedButton(
                 style: ButtonStyle(
                     backgroundColor:
@@ -48,7 +49,7 @@ class _VehiclesState extends State<Vehicles> {
                         image: DecorationImage(
                             image: AssetImage('images/tricycle.png'),
                             fit: BoxFit.contain)))),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
             ElevatedButton(
                 style: ButtonStyle(
                     backgroundColor:
