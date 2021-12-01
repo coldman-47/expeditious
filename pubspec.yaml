@@ -37,6 +37,8 @@ dependencies:
   logger: ^1.1.0
   eventify: ^1.0.0
   timeline_tile: ^2.0.0
+  flutter_sound: ^4.0.6
+  permission_handler: ^5.1.0+2
 
 dev_dependencies:
   flutter_test:
