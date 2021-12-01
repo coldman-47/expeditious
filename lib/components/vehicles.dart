@@ -24,7 +24,7 @@ class _VehiclesState extends State<Vehicles> {
                     backgroundColor:
                         MaterialStateProperty.all<Color>(Colors.blue.shade100)),
                 onPressed: () {
-                  widget.progress(3);
+                  widget.progress(2);
                 },
                 child: Container(
                     height: 150,
@@ -39,7 +39,7 @@ class _VehiclesState extends State<Vehicles> {
                     backgroundColor:
                         MaterialStateProperty.all<Color>(Colors.blue.shade100)),
                 onPressed: () {
-                  widget.progress(3);
+                  widget.progress(2);
                 },
                 child: Container(
                     height: 150,
@@ -54,7 +54,7 @@ class _VehiclesState extends State<Vehicles> {
                     backgroundColor:
                         MaterialStateProperty.all<Color>(Colors.blue.shade100)),
                 onPressed: () {
-                  widget.progress(3);
+                  widget.progress(2);
                 },
                 child: Container(
                     height: 150,

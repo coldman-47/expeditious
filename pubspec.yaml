@@ -41,6 +41,7 @@ flutter:
     - images/van.png
     - images/tricycle.png
     - images/appel.png
-    - images/vocal.png
-    - images/formulaire.png
+    - images/call.png
+    - images/audio.png
+    - images/itineraire.png
   

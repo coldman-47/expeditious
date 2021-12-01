@@ -4,7 +4,7 @@ import 'package:timeline_tile/timeline_tile.dart';
 
 class Adresses extends StatefulWidget {
   final String title = 'Adresses de la livraison';
-  final String index = '3';
+  final int index = 3;
   final double stepValue = 1;
 
   const Adresses({Key? key}) : super(key: key);

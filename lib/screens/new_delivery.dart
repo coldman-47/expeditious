@@ -18,6 +18,7 @@ class NewDelivery extends StatelessWidget {
         child: Scaffold(
             backgroundColor: Colors.transparent,
             appBar: AppBar(
+                centerTitle: true,
                 backgroundColor: Colors.transparent,
                 title: const Image(
                     image: AssetImage('images/logo.png'),
@@ -75,29 +76,30 @@ class LivraisonCtrl extends StatefulWidget {
   _LivraisonCtrlState createState() => _LivraisonCtrlState();
 }
 
+// double _progress = 0;
+// void startTimer() {
+//   new Timer.periodic(
+//     Duration(seconds: 1),
+//     (Timer timer) => setState(
+//       () {
+//         if (_progress == 1) {
+//           timer.cancel();
+//         } else {
+//           _progress += 0.2;
+//         }
+//       },
+//     ),
+//   );
+// }
 class _LivraisonCtrlState extends State<LivraisonCtrl> {
-  double _progress = 0;
-  void startTimer() {
-    new Timer.periodic(
-      Duration(seconds: 1),
-      (Timer timer) => setState(
-        () {
-          if (_progress == 1) {
-            timer.cancel();
-          } else {
-            _progress += 0.2;
-          }
-        },
-      ),
-    );
-  }
-
   late dynamic deliveryStep;
 
-  _loadStep(int index) {
+  dynamic _loadStep(int index) {
     setState(() {
       if (index == 1) {
         deliveryStep = Vehicles(progress: _loadStep);
+      } else if (index == 2) {
+        deliveryStep = Choix(progress: _loadStep);
       } else if (index == 3) {
         deliveryStep = const Adresses();
       }
@@ -114,6 +116,24 @@ class _LivraisonCtrlState extends State<LivraisonCtrl> {
       Container(
           padding: EdgeInsets.all(10),
           child: Row(children: [
+            if (deliveryStep.index > 1)
+              IconButton(
+                  constraints: const BoxConstraints(),
+                  color: Colors.orange,
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: () {
+                    _loadStep(deliveryStep.index - 1);
+                  })
+            else
+              const SizedBox(width: 50),
+            const SizedBox(width: 16),
+            Expanded(
+                child: Text(deliveryStep.title,
+                    style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black54))),
+            const SizedBox(width: 16),
             CircleAvatar(
               radius: 25,
               backgroundColor: Colors.blueGrey[100],
@@ -124,14 +144,7 @@ class _LivraisonCtrlState extends State<LivraisonCtrl> {
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 22))),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-                child: Text(deliveryStep.title,
-                    style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black54))),
+            )
           ])),
       LinearProgressIndicator(
           valueColor: const AlwaysStoppedAnimation<Color>(Colors.orange),
