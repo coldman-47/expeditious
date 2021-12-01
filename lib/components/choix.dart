@@ -17,78 +17,75 @@ class _ChoixState extends State<Choix> {
   Widget build(BuildContext context) {
     return Container( 
       padding: const EdgeInsets.all(20),
-      child: Column(mainAxisAlignment: MainAxisAlignment.start,
+      child: Column(crossAxisAlignment: CrossAxisAlignment.stretch,
         children:[
-        Row(
+        Row(mainAxisAlignment: MainAxisAlignment.start,
         children:[
-         Material(
-               elevation: 6,
-               shape: const CircleBorder(),
-               clipBehavior: Clip.antiAliasWithSaveLayer,
-               child:  InkWell(
-                 splashColor: Colors.greenAccent,
-                 onTap: (){} ,
-                 child: Ink.image(
-                             image: const AssetImage('appel.png'),
-                              width: 100 ,
-                              height: 100 ,
-                              fit: BoxFit.cover,),
-                              )
-                       ),
-         const Spacer(),
-         const Text('Recevoir un appel',   
+          ButtonBar(alignment: MainAxisAlignment.start, children: [
+            ElevatedButton(
+                style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.blue.shade100)),
+                onPressed: () {},
+                child: Container(
+                    height: 100,
+                    width: 100,
+                    decoration: const BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage('images/appel.png'),
+                            fit: BoxFit.cover)))),
+          ]),
+          const Text('Recevoir un appel',   
                     style: TextStyle(
                     height: 18,  
-                    fontSize: 20,)
-        )]),
+                    fontSize: 20,) )]),
              
 
-        Row(
+        Row(mainAxisAlignment: MainAxisAlignment.start,
         children:[
-         Material(
-               elevation: 6,
-               shape: const CircleBorder(),
-               clipBehavior: Clip.antiAliasWithSaveLayer,
-               child:  InkWell(
-                 splashColor: Colors.greenAccent,
-                 onTap: (){} ,
-                 child: Ink.image(
-                             image: const AssetImage('vocal.png'),
-                              width: 100 ,
-                              height: 100 ,
-                              fit: BoxFit.cover,),
-                              )
-                       ),
-         const Spacer(),
-         const Text('Faire un vocal',   
+          const Material(elevation: 6,
+               shape: CircleBorder(),
+               clipBehavior: Clip.antiAliasWithSaveLayer,),
+            ElevatedButton(
+                style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.blue.shade100)),
+                onPressed: () {},
+                child: Container(
+                    height: 100,
+                    width: 100,
+                    decoration: const BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage('vocal.png'),
+                            fit: BoxFit.cover)))),
+             const Text('Faire un vocal',   
                     style: TextStyle(
                     height: 18,  
                     fontSize: 20,))]),
        
-        Row(
+        Row(mainAxisAlignment: MainAxisAlignment.start,
         children:[
-         Material(
-               elevation: 6,
-               borderRadius: BorderRadius.circular(20),
-               clipBehavior: Clip.antiAliasWithSaveLayer,
-               child:  InkWell(
-                 splashColor: Colors.black12,
-                 onTap: (){} ,
-                 child: Ink.image(
-                             image: const AssetImage('formulaire.png'),
-                              width: 100 ,
-                              height: 100 ,
-                              fit: BoxFit.cover,),
-                              )
-                       ),
-      
-         const Text('Remplir le formulaire',   
+          const Material(
+            elevation: 6,
+               shape: CircleBorder(),
+               clipBehavior: Clip.antiAliasWithSaveLayer,),
+            ElevatedButton(
+                style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.blue.shade100)),
+                onPressed: () {},
+                child: Container(
+                    height: 100,
+                    width: 100,
+                    decoration: const BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage('formulaire.png'),
+                            fit: BoxFit.cover)))),
+                    const Text('Remplir le formulaire',   
                     style: TextStyle(
                     height: 18,  
-                    fontSize: 20,
-                    ))]),
-                   
-        ]));
+                    fontSize: 20,))
+        ])]));
   
   }
 }
