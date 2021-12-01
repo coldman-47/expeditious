@@ -40,7 +40,7 @@ class _AdressesState extends State<Adresses> {
                         decoration: InputDecoration(
                             alignLabelWithHint: true,
                             filled: false,
-                            labelText: 'Récupération')))),
+                            labelText: '* Récupération')))),
             TimelineTile(
                 beforeLineStyle:
                     LineStyle(thickness: 1.5, color: Colors.blueGrey),
@@ -55,7 +55,12 @@ class _AdressesState extends State<Adresses> {
                         decoration: InputDecoration(
                             alignLabelWithHint: true,
                             filled: false,
-                            labelText: 'Livraison')))),
+                            labelText: '* Livraison')))),
+            const TextField(
+              maxLines: 4,
+              decoration:
+                  InputDecoration(labelText: 'Commentaire', filled: true),
+            ),
             Container(
                 padding: EdgeInsets.all(30),
                 child: TextButton(

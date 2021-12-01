@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:nrj_express/components/adresses.dart';
 import 'package:nrj_express/components/vehicles.dart';
+import 'package:nrj_express/components/choix.dart';
 
 class NewDelivery extends StatelessWidget {
   const NewDelivery({Key? key}) : super(key: key);
@@ -21,9 +22,8 @@ class NewDelivery extends StatelessWidget {
                 title: const Image(
                     image: AssetImage('images/logo.png'),
                     fit: BoxFit.contain,
-                    height: 75,
+                    height: 60,
                     width: 250),
-                centerTitle: true,
                 elevation: 0),
             body: Container(
                 constraints: BoxConstraints.expand(),
@@ -62,7 +62,7 @@ class NewDelivery extends StatelessWidget {
                                     decoration: BoxDecoration(
                                         borderRadius:
                                             BorderRadius.circular(30)),
-                                    child: LivraisonCtrl()),
+                                    child: const LivraisonCtrl()),
                               ))
                         ])))));
   }
@@ -77,7 +77,6 @@ class LivraisonCtrl extends StatefulWidget {
 
 class _LivraisonCtrlState extends State<LivraisonCtrl> {
   double _progress = 0;
-
   void startTimer() {
     new Timer.periodic(
       Duration(seconds: 1),
@@ -93,14 +92,24 @@ class _LivraisonCtrlState extends State<LivraisonCtrl> {
     );
   }
 
+  late dynamic deliveryStep;
+
+  _loadStep(int index) {
+    setState(() {
+      if (index == 1) {
+        deliveryStep = Vehicles(progress: _loadStep);
+      } else if (index == 3) {
+        deliveryStep = const Adresses();
+      }
+    });
+  }
+
+  _LivraisonCtrlState() {
+    deliveryStep = Vehicles(progress: _loadStep);
+  }
+
   @override
   Widget build(BuildContext context) {
-    late Vehicles vehic;
-    late Adresses loc;
-
-    vehic = Vehicles();
-    loc = Adresses();
-
     return Column(children: [
       Container(
           padding: EdgeInsets.all(10),
@@ -110,26 +119,27 @@ class _LivraisonCtrlState extends State<LivraisonCtrl> {
               backgroundColor: Colors.blueGrey[100],
               child: CircleAvatar(
                   backgroundColor: Colors.blueGrey[900],
-                  child: Text(loc.index,
-                      style: TextStyle(
+                  child: Text(deliveryStep.index.toString(),
+                      style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 22))),
             ),
             const SizedBox(width: 16),
             Expanded(
-                child: Text(loc.title,
-                    style: TextStyle(
+                child: Text(deliveryStep.title,
+                    style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                         color: Colors.black54))),
           ])),
       LinearProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(Colors.orange),
-          value: loc.stepValue,
+          valueColor: const AlwaysStoppedAnimation<Color>(Colors.orange),
+          value: deliveryStep.stepValue,
           minHeight: 2),
       Container(
-          height: 450, child: Center(child: SingleChildScrollView(child: loc)))
+          height: 450,
+          child: Center(child: SingleChildScrollView(child: deliveryStep)))
     ]);
   }
 }
