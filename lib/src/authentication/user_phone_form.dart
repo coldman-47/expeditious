@@ -2,6 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:logger/logger.dart';
+import 'package:nrj_express/api/phone_auth.dart';
 
 class UserPhoneForm extends StatefulWidget {
   final bool page;
@@ -14,6 +16,9 @@ class UserPhoneForm extends StatefulWidget {
 }
 
 class _UserPhoneFormState extends State<UserPhoneForm> {
+  final phoneCtrl = TextEditingController();
+  final loginService = PhoneAuth();
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -48,6 +53,7 @@ class _UserPhoneFormState extends State<UserPhoneForm> {
                                           fontWeight: FontWeight.bold))),
                               const Spacer(),
                               TextFormField(
+                                controller: phoneCtrl,
                                 keyboardType: TextInputType.phone,
                                 decoration: const InputDecoration(
                                     filled: false,
@@ -66,7 +72,9 @@ class _UserPhoneFormState extends State<UserPhoneForm> {
                                     backgroundColor: Colors.orange,
                                     primary: Colors.white),
                                 onPressed: () {
-                                  widget.loadPage(false);
+                                  loginService.login(phoneCtrl.text).then(
+                                      (value) =>
+                                          {if (value) widget.loadPage(false)});
                                 },
                               ),
                               const Spacer()
