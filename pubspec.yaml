@@ -21,6 +21,7 @@ dependencies:
   intl: ^0.17.0
   permission_handler: ^8.1.2
   path: ^1.8.0
+  http_interceptor: ^1.0.2
 
 dev_dependencies:
   flutter_test:
