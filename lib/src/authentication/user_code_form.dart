@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:nrj_express/api/code_confirmation.dart';
 import 'package:nrj_express/screens/new_delivery.dart';
 
 class UserCodeForm extends StatefulWidget {
   final bool page;
+  final String telephone;
   final ValueChanged<bool> loadPage;
-  const UserCodeForm({Key? key, required this.page, required this.loadPage})
+  const UserCodeForm(
+      {Key? key,
+      required this.page,
+      required this.loadPage,
+      required this.telephone})
       : super(key: key);
 
   @override
@@ -12,6 +18,8 @@ class UserCodeForm extends StatefulWidget {
 }
 
 class _UserCodeFormState extends State<UserCodeForm> {
+  final codeConfirmationService = CodeConfirmation();
+  final codeCtrl = TextEditingController();
   @override
   Widget build(BuildContext context) {
     var transparent = Colors.transparent;
@@ -61,6 +69,7 @@ class _UserCodeFormState extends State<UserCodeForm> {
                                             fontWeight: FontWeight.bold))),
                                 const Spacer(),
                                 TextFormField(
+                                  controller: codeCtrl,
                                   keyboardType: TextInputType.phone,
                                   decoration: const InputDecoration(
                                       filled: false,
@@ -79,11 +88,19 @@ class _UserCodeFormState extends State<UserCodeForm> {
                                       backgroundColor: Colors.orange,
                                       primary: Colors.white),
                                   onPressed: () {
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const NewDelivery()));
+                                    codeConfirmationService
+                                        .confirm(
+                                            widget.telephone, codeCtrl.text)
+                                        .then((value) => {
+                                              if (value)
+                                                {
+                                                  Navigator.pushReplacement(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              const NewDelivery()))
+                                                }
+                                            });
                                   },
                                 ),
                                 const Spacer()
