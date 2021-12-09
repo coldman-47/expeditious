@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:logger/logger.dart';
 import 'package:nrj_express/screens/new_delivery.dart';
 import 'package:nrj_express/src/authentication/user_code_form.dart';
 import 'src/authentication/user_phone_form.dart';
