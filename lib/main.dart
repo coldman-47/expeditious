@@ -32,15 +32,22 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   bool phoneInput = true;
   late Widget page;
+  late String telephone = "";
+
+  _getPhone(String phoneNumber) {
+    setState(() {
+      telephone = phoneNumber;
+    });
+  }
 
   _loadPage(bool numPage) {
     setState(() {
-      page = authForms(numPage, _loadPage);
+      page = authForms(numPage, _loadPage, telephone, _getPhone);
     });
   }
 
   _MyHomePageState() {
-    page = authForms(phoneInput, _loadPage);
+    page = authForms(phoneInput, _loadPage, telephone);
   }
 
   @override
@@ -56,14 +63,10 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-authForms(bool phoneInput, ValueChanged<bool> callback) {
-  return (phoneInput)
+authForms(bool phoneInput, ValueChanged<bool> pageChanger, String phone,
+    [ValueChanged<String>? phoneGetter]) {
+  return (phoneInput && phoneGetter != null)
       ? UserPhoneForm(
-          page: phoneInput,
-          loadPage: callback,
-        )
-      : UserCodeForm(
-          page: phoneInput,
-          loadPage: callback,
-        );
+          page: phoneInput, loadPage: pageChanger, getPhone: phoneGetter)
+      : UserCodeForm(page: phoneInput, loadPage: pageChanger, telephone: phone);
 }

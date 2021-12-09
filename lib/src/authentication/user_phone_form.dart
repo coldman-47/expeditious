@@ -8,7 +8,12 @@ import 'package:nrj_express/api/phone_auth.dart';
 class UserPhoneForm extends StatefulWidget {
   final bool page;
   final ValueChanged<bool> loadPage;
-  const UserPhoneForm({Key? key, required this.page, required this.loadPage})
+  ValueChanged<String> getPhone;
+  UserPhoneForm(
+      {Key? key,
+      required this.page,
+      required this.loadPage,
+      required this.getPhone})
       : super(key: key);
 
   @override
@@ -72,9 +77,15 @@ class _UserPhoneFormState extends State<UserPhoneForm> {
                                     backgroundColor: Colors.orange,
                                     primary: Colors.white),
                                 onPressed: () {
-                                  loginService.login(phoneCtrl.text).then(
-                                      (value) =>
-                                          {if (value) widget.loadPage(false)});
+                                  loginService
+                                      .login(phoneCtrl.text)
+                                      .then((value) => {
+                                            if (value)
+                                              {
+                                                widget.getPhone(phoneCtrl.text),
+                                                widget.loadPage(false)
+                                              }
+                                          });
                                 },
                               ),
                               const Spacer()
