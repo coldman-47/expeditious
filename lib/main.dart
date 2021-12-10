@@ -53,9 +53,9 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  _loadPage(bool numPage) async {
+  _loadPage(bool phonePage) async {
     setState(() {
-      page = authForms(numPage, _loadPage, telephone, _getPhone);
+      page = authForms(phonePage, _loadPage, telephone, _getPhone);
     });
   }
 
@@ -66,7 +66,9 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   _MyHomePageState() {
-    page = authForms(phoneInput, _loadPage, telephone);
+    page = phoneInput
+        ? authForms(phoneInput, _loadPage, telephone, _getPhone)
+        : authForms(phoneInput, _loadPage, telephone);
   }
 
   @override

@@ -12,7 +12,7 @@ class CodeConfirmation {
     bool authenticated = false;
     try {
       var uri =
-          Uri.parse("https://7b41-41-83-49-211.ngrok.io/api/auth/confirm");
+          Uri.parse("https://635d-41-83-49-211.ngrok.io/api/auth/confirm");
       final response = await httpCli.post(uri,
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
