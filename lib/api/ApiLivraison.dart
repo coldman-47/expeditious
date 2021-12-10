@@ -1,7 +1,7 @@
 
 import 'package:http/http.dart' as http;
 
-import '../model/livraisonModel.dart';
+import '../livraisonModel.dart';
 
 // ignore: camel_case_types
 class APiLivraison {
