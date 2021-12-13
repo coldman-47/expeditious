@@ -1,27 +1,26 @@
+import 'dart:convert';
 
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:nrj_express/models/delivery_model.dart';
 
-import '../livraisonModel.dart';
+class DeliveryController {
 
-// ignore: camel_case_types
-class APiLivraison {
-  Future<LivraisonModel> getLivraisonData() async {
-    var uri = Uri.parse('https://5b7c-41-83-49-211.ngrok.io/api-doc/#/Livraisons/get_api_livraisons_');
-    var livraisonModel;
+  Future<Livraison> newLivraison(String lieuArrivee, String lieuDepart) async {
 
-     try{
-          final response = await http.get(uri);
-          if(response.statusCode == 200){
-             final String responseString = response.body;
+    const storage = FlutterSecureStorage();
 
-             final livraisonModel = LivraisonModel.fromJson(responseString);
+    final token = await storage.read(key: 'token');
 
-          return livraisonModel;
-  
-    }
-  } catch (e) {
-     
-    }
-    return livraisonModel;
-  }
+    final response = await http.post(Uri.parse(''),
+      headers: {  'Accept' : 'application/json', 'xx-token' : token! },
+      body: {
+        'lieuArrivee' : lieuArrivee,
+        'lieuDepart' :lieuDepart
+      }
+    );
+
+    return Livraison.fromJson( jsonDecode( response.body ) );
+  } 
+
 }
