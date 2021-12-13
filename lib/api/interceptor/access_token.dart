@@ -20,5 +20,5 @@ class AccessTokenInterceptor implements InterceptorContract {
       data;
 }
 
-final InterceptedClient ClientIntercepted =
+final InterceptedClient clientIntercepted =
     InterceptedClient.build(interceptors: [AccessTokenInterceptor()]);

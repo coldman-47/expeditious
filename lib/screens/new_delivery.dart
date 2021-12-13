@@ -5,6 +5,7 @@ import 'package:logger/logger.dart';
 import 'package:nrj_express/components/adresses.dart';
 import 'package:nrj_express/components/vehicles.dart';
 import 'package:nrj_express/components/choix.dart';
+import 'package:nrj_express/models/livraison.dart';
 
 class NewDelivery extends StatelessWidget {
   const NewDelivery({Key? key}) : super(key: key);
@@ -93,11 +94,13 @@ class LivraisonCtrl extends StatefulWidget {
 // }
 class _LivraisonCtrlState extends State<LivraisonCtrl> {
   late dynamic deliveryStep;
+  Livraison livraison = Livraison();
 
   dynamic _loadStep(int index) {
     setState(() {
+      print(livraison.categorie);
       if (index == 1) {
-        deliveryStep = Vehicles(progress: _loadStep);
+        deliveryStep = Vehicles(progress: _loadStep, delivery: livraison);
       } else if (index == 2) {
         deliveryStep = Choix(progress: _loadStep);
       } else if (index == 3) {
@@ -107,7 +110,7 @@ class _LivraisonCtrlState extends State<LivraisonCtrl> {
   }
 
   _LivraisonCtrlState() {
-    deliveryStep = Vehicles(progress: _loadStep);
+    deliveryStep = Vehicles(progress: _loadStep, delivery: livraison);
   }
 
   @override

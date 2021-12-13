@@ -6,13 +6,13 @@ import 'package:http_interceptor/http/intercepted_client.dart';
 import 'interceptor/access_token.dart';
 
 class CodeConfirmation {
-  InterceptedClient httpCli = ClientIntercepted;
+  InterceptedClient httpCli = clientIntercepted;
 
   Future<bool> confirm(String telephone, String code) async {
     bool authenticated = false;
     try {
       var uri =
-          Uri.parse("https://635d-41-83-49-211.ngrok.io/api/auth/confirm");
+          Uri.parse("https://2712-41-83-49-211.ngrok.io/api/auth/confirm");
       final response = await httpCli.post(uri,
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
