@@ -41,7 +41,7 @@ class _VehiclesState extends State<Vehicles> {
           ButtonBar(alignment: MainAxisAlignment.center, children: [
             for (var categorie in categories)
               Container(
-                  margin: EdgeInsets.only(bottom: 15, top: 10),
+                  margin: const EdgeInsets.only(bottom: 15, top: 10),
                   child: ElevatedButton(
                       style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all<Color>(
@@ -58,69 +58,7 @@ class _VehiclesState extends State<Vehicles> {
                                   image: AssetImage(
                                       'images/${categorie["label"]}.png'),
                                   fit: BoxFit.contain))))),
-            // ElevatedButton(
-            //     style: ButtonStyle(
-            //         backgroundColor:
-            //             MaterialStateProperty.all<Color>(Colors.blue.shade100)),
-            //     onPressed: () {
-            //       widget.progress(2);
-            //     },
-            //     child: Container(
-            //         height: 150,
-            //         width: 175,
-            //         decoration: const BoxDecoration(
-            //             image: DecorationImage(
-            //                 image: AssetImage('images/bike.png'),
-            //                 fit: BoxFit.contain)))),
-            // const SizedBox(height: 15),
-            // ElevatedButton(
-            //     style: ButtonStyle(
-            //         backgroundColor:
-            //             MaterialStateProperty.all<Color>(Colors.blue.shade100)),
-            //     onPressed: () {
-            //       widget.progress(2);
-            //     },
-            //     child: Container(
-            //         height: 150,
-            //         width: 175,
-            //         decoration: const BoxDecoration(
-            //             image: DecorationImage(
-            //                 image: AssetImage('images/tricycle.png'),
-            //                 fit: BoxFit.contain)))),
-            // const SizedBox(height: 15),
-            // ElevatedButton(
-            //     style: ButtonStyle(
-            //         backgroundColor:
-            //             MaterialStateProperty.all<Color>(Colors.blue.shade100)),
-            //     onPressed: () {
-            //       widget.progress(2);
-            //     },
-            //     child: Container(
-            //         height: 150,
-            //         width: 175,
-            //         decoration: const BoxDecoration(
-            //             image: DecorationImage(
-            //                 image: AssetImage('images/van.png'),
-            //                 fit: BoxFit.contain)))),
           ])
         ]));
   }
-}
-
-showCategories(List categories, dynamic widget) {
-  for (var i in categories)
-    ElevatedButton(
-        style: ButtonStyle(
-            backgroundColor:
-                MaterialStateProperty.all<Color>(Colors.blue.shade100)),
-        onPressed: () {
-          widget.progress(2);
-        },
-        child: Container(
-            height: 150,
-            width: 175,
-            decoration: const BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage('images/bike.png'),
-                    fit: BoxFit.contain))));
 }
