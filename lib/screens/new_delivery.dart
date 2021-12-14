@@ -1,10 +1,8 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 import 'package:nrj_express/components/adresses.dart';
-import 'package:nrj_express/components/vehicles.dart';
+import 'package:nrj_express/components/categories.dart';
 import 'package:nrj_express/components/choix.dart';
+import 'package:nrj_express/models/livraison.dart';
 
 class NewDelivery extends StatelessWidget {
   const NewDelivery({Key? key}) : super(key: key);
@@ -27,11 +25,11 @@ class NewDelivery extends StatelessWidget {
                     width: 250),
                 elevation: 0),
             body: Container(
-                constraints: BoxConstraints.expand(),
+                constraints: const BoxConstraints.expand(),
                 padding: const EdgeInsets.symmetric(
                     vertical: 10, horizontal: 25), //.all(25),
                 child: Container(
-                    padding: EdgeInsets.all(5),
+                    padding: const EdgeInsets.all(5),
                     width: 350,
                     child: Stack(
                         clipBehavior: Clip.none,
@@ -39,7 +37,7 @@ class NewDelivery extends StatelessWidget {
                         children: [
                           Positioned(
                               child: Container(
-                                  padding: EdgeInsets.all(20),
+                                  padding: const EdgeInsets.all(20),
                                   decoration: BoxDecoration(
                                       color: Colors.blueGrey[900],
                                       borderRadius: BorderRadius.circular(15)),
@@ -93,34 +91,38 @@ class LivraisonCtrl extends StatefulWidget {
 // }
 class _LivraisonCtrlState extends State<LivraisonCtrl> {
   late dynamic deliveryStep;
+  Livraison livraison = Livraison();
+  late String deliveryChoice;
 
   dynamic _loadStep(int index) {
     setState(() {
       if (index == 1) {
-        deliveryStep = Vehicles(progress: _loadStep);
+        deliveryStep = Categories(progress: _loadStep, delivery: livraison);
       } else if (index == 2) {
         deliveryStep = Choix(progress: _loadStep);
-      } else if (index == 3) {
-        deliveryStep = const Adresses();
+      } else {
+        if (deliveryStep.choice == 'itineraire') {
+          deliveryStep = Adresses(delivery: livraison);
+        }
       }
     });
   }
 
   _LivraisonCtrlState() {
-    deliveryStep = Vehicles(progress: _loadStep);
+    deliveryStep = Categories(progress: _loadStep, delivery: livraison);
   }
 
   @override
   Widget build(BuildContext context) {
     return Column(children: [
       Container(
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           child: Row(children: [
             if (deliveryStep.index > 1)
               IconButton(
                   constraints: const BoxConstraints(),
                   color: Colors.orange,
-                  icon: Icon(Icons.arrow_back),
+                  icon: const Icon(Icons.arrow_back),
                   onPressed: () {
                     _loadStep(deliveryStep.index - 1);
                   })
@@ -150,7 +152,7 @@ class _LivraisonCtrlState extends State<LivraisonCtrl> {
           valueColor: const AlwaysStoppedAnimation<Color>(Colors.orange),
           value: deliveryStep.stepValue,
           minHeight: 2),
-      Container(
+      SizedBox(
           height: 450,
           child: Center(child: SingleChildScrollView(child: deliveryStep)))
     ]);

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:nrj_express/screens/new_delivery.dart';
 import 'package:nrj_express/src/authentication/user_code_form.dart';
 import 'src/authentication/user_phone_form.dart';
 
-void main() {
+void main() async {
+  await dotenv.load();
+
   runApp(const MyApp());
 }
 
@@ -53,9 +56,9 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  _loadPage(bool numPage) async {
+  _loadPage(bool phonePage) async {
     setState(() {
-      page = authForms(numPage, _loadPage, telephone, _getPhone);
+      page = authForms(phonePage, _loadPage, telephone, _getPhone);
     });
   }
 
@@ -66,7 +69,9 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   _MyHomePageState() {
-    page = authForms(phoneInput, _loadPage, telephone);
+    page = phoneInput
+        ? authForms(phoneInput, _loadPage, telephone, _getPhone)
+        : authForms(phoneInput, _loadPage, telephone);
   }
 
   @override

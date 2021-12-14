@@ -1,18 +1,18 @@
 import 'dart:convert';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http_interceptor/http/intercepted_client.dart';
 
 import 'interceptor/access_token.dart';
 
 class CodeConfirmation {
-  InterceptedClient httpCli = ClientIntercepted;
+  InterceptedClient httpCli = clientIntercepted;
 
   Future<bool> confirm(String telephone, String code) async {
     bool authenticated = false;
     try {
-      var uri =
-          Uri.parse("https://7b41-41-83-49-211.ngrok.io/api/auth/confirm");
+      var uri = Uri.parse(dotenv.env['API_URL']! + "auth/confirm");
       final response = await httpCli.post(uri,
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
