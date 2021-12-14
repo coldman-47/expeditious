@@ -3,7 +3,7 @@ import '../components/components.dart';
 
 class RecordScreen extends StatefulWidget {
   final String title = 'Envoyez les adresses de la livraison par message vocal';
-  final String index = '3';
+  final int index = 3;
   final double stepValue = 0.33;
 
   const RecordScreen({Key? key}) : super(key: key);

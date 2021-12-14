@@ -2,21 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:nrj_express/api/categorie_service.dart';
 import 'package:nrj_express/models/livraison.dart';
 
-class Vehicles extends StatefulWidget {
+class Categories extends StatefulWidget {
   final String title = 'Type de transport';
   final int index = 1;
   final double stepValue = 0.33;
   final Livraison delivery;
   final ValueChanged<int> progress;
 
-  const Vehicles({Key? key, required this.progress, required this.delivery})
+  const Categories({Key? key, required this.progress, required this.delivery})
       : super(key: key);
 
   @override
-  _VehiclesState createState() => _VehiclesState();
+  _CategoriesState createState() => _CategoriesState();
 }
 
-class _VehiclesState extends State<Vehicles> {
+class _CategoriesState extends State<Categories> {
   late List<dynamic> categories = [];
   CategorieService categorieSrv = CategorieService();
 

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http_interceptor/http/intercepted_client.dart';
 
 import 'interceptor/access_token.dart';
@@ -10,7 +11,7 @@ class CategorieService {
   Future<List> getAll() async {
     dynamic categories;
     try {
-      var uri = Uri.parse("https://2712-41-83-49-211.ngrok.io/api/categories");
+      var uri = Uri.parse(dotenv.env['API_URL']! + "categories");
       final response = await httpCli.get(uri);
       if (response.statusCode == 200) {
         categories = jsonDecode(response.body) as List;
