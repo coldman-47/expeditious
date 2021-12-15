@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -9,10 +8,13 @@ import 'package:nrj_express/models/livraison.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:path/path.dart' as path;
-import 'package:intl/intl.dart' show DateFormat;
 
 class Record extends StatefulWidget {
-  const Record({Key? key}) : super(key: key);
+  final String title = 'Envoyer un message vocal';
+  final int index = 3;
+  final double stepValue = 1;
+  final Livraison delivery;
+  const Record({Key? key, required this.delivery}) : super(key: key);
 
   @override
   _RecordState createState() => _RecordState();
@@ -28,7 +30,7 @@ class _RecordState extends State<Record> {
   @override
   void initState() {
     super.initState();
-    startIt();
+    // startIt();
   }
 
   @override
