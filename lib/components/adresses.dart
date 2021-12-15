@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nrj_express/api/livraison_service.dart';
 import 'package:nrj_express/models/livraison.dart';
 import 'package:nrj_express/screens/new_delivery.dart';
-import 'package:timeline_tile/timeline_tile.dart';
+import '../screens/screens.dart';
 
 class Adresses extends StatefulWidget {
   final String title = 'Adresses de la livraison';
