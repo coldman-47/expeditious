@@ -9,7 +9,7 @@ class CategorieService {
   InterceptedClient httpCli = clientIntercepted;
 
   Future<List> getAll() async {
-    dynamic categories;
+    dynamic categories = [];
     try {
       var uri = Uri.parse(dotenv.env['API_URL']! + "categories");
       final response = await httpCli.get(uri);
