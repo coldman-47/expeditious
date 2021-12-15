@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nrj_express/components/adresses.dart';
 import 'package:nrj_express/components/categories.dart';
 import 'package:nrj_express/components/choix.dart';
+import 'package:nrj_express/components/record.dart';
 import 'package:nrj_express/models/livraison.dart';
 
 class NewDelivery extends StatelessWidget {
@@ -103,6 +104,8 @@ class _LivraisonCtrlState extends State<LivraisonCtrl> {
       } else {
         if (deliveryStep.choice == 'itineraire') {
           deliveryStep = Adresses(delivery: livraison);
+        } else if (deliveryStep.choice == 'audio') {
+          deliveryStep = Record(delivery: livraison);
         }
       }
     });
@@ -131,6 +134,7 @@ class _LivraisonCtrlState extends State<LivraisonCtrl> {
             const SizedBox(width: 16),
             Expanded(
                 child: Text(deliveryStep.title,
+                    textAlign: TextAlign.center,
                     style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,

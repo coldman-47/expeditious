@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:nrj_express/api/livraison_service.dart';
 import 'package:nrj_express/models/livraison.dart';
 import 'package:nrj_express/screens/new_delivery.dart';
-import '../screens/screens.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
 class Adresses extends StatefulWidget {

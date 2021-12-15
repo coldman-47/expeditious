@@ -67,7 +67,7 @@ class _RecordScreenState extends State<RecordScreen> {
                                     decoration: BoxDecoration(
                                         borderRadius:
                                             BorderRadius.circular(30)),
-                                    child: const Record()),
+                                    child: Text('')),
                               ))
                         ])))));
   }
