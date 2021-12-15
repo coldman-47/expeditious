@@ -10,7 +10,7 @@ class LivraisonService {
   InterceptedClient httpCli = clientIntercepted;
 
   Future<Object> create(Livraison livraison) async {
-    var newCli = {};
+    late dynamic reqResponse;
     try {
       var uri = Uri.parse(dotenv.env['API_URL']! + "livraisons/add");
       final response = await httpCli.post(uri,
@@ -19,13 +19,14 @@ class LivraisonService {
           },
           body: jsonEncode(livraison.toJson()));
       if (response.statusCode == 200) {
-        print(jsonEncode(livraison.toJson()));
+        reqResponse = true;
       } else {
+        reqResponse = response.body;
         throw Exception("Une erreur s'est produite. \n ${response.body}");
       }
     } catch (e) {
       print(e);
     }
-    return newCli;
+    return reqResponse;
   }
 }

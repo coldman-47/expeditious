@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nrj_express/api/livraison_service.dart';
 import 'package:nrj_express/models/livraison.dart';
+import 'package:nrj_express/screens/new_delivery.dart';
 import '../screens/screens.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
@@ -85,8 +86,10 @@ class _AdressesState extends State<Adresses> {
                     onPressed: () async {
                       widget.delivery.lieuDepart = adresseRecuperationCtrl.text;
                       widget.delivery.lieuArrivee = adresseLivraisonCtrl.text;
-                      popUpPostCreation(context);
-                      // await livraisonSrv.create(widget.delivery);
+                      var create = await livraisonSrv.create(widget.delivery);
+                      if (create == true) {
+                        popUpPostCreation(context);
+                      }
                     }))
           ],
         ));
@@ -129,7 +132,12 @@ popUpPostCreation(context) {
                   style: ButtonStyle(
                       foregroundColor:
                           MaterialStateProperty.all(Colors.blueGrey[700])),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const NewDelivery()));
+                  },
                   child: Center(
                       child: Row(
                     children: const [
