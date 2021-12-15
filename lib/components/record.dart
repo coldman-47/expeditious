@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:nrj_express/api/livraison_service.dart';
+import 'package:nrj_express/models/livraison.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:path/path.dart' as path;
@@ -80,6 +82,15 @@ class _RecordState extends State<Record> {
               child: const Text("Envoyer"),
               onPressed: startPlaying,
             ),
+            SizedBox(
+              height: 56,
+            ),
+            ElevatedButton(
+              child: Icon(Icons.send),
+              onPressed: () {
+                sendAudio();
+              },
+            )
           ],
         ))
       ],
@@ -136,5 +147,15 @@ class _RecordState extends State<Record> {
 
   Future<void> stopPlaying() async {
     audioPlayer.stop();
+  }
+
+  void sendAudio() {
+    Livraison delivery = Livraison();
+
+    delivery.audio = audioPlayer
+        .open(Audio.file("/sdcard/Download/Express/audio.wav"))
+        .toString();
+    final livraisonSrv = LivraisonService();
+    livraisonSrv.create(delivery);
   }
 }

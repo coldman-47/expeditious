@@ -3,19 +3,22 @@ class Livraison {
   String? lieuDepart;
   String? lieuArrivee;
   String? categorie;
+  String? audio;
 
-  Livraison({
-    this.client,
-    this.lieuDepart,
-    this.lieuArrivee,
-    this.categorie,
-  });
+  Livraison(
+      {this.client,
+      this.lieuDepart,
+      this.lieuArrivee,
+      this.categorie,
+      this.audio});
 
   factory Livraison.fromJson(Map<String, dynamic> json) => Livraison(
-      client: json["client"],
-      lieuDepart: json["lieuDepart"],
-      lieuArrivee: json["lieuArrivee"],
-      categorie: json["categorie"]);
+        client: json["client"],
+        lieuDepart: json["lieuDepart"],
+        lieuArrivee: json["lieuArrivee"],
+        categorie: json["categorie"],
+        audio: json["audio"],
+      );
 
   Map<String, dynamic> toJson() => {
         "client": client,
