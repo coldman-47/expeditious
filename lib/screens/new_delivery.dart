@@ -106,7 +106,9 @@ class _LivraisonCtrlState extends State<LivraisonCtrl> {
           deliveryStep = Adresses(delivery: livraison);
         } else if (deliveryStep.choice == 'audio') {
           deliveryStep = Record(delivery: livraison);
-        }
+        } else if (deliveryStep.choice == 'call') {
+          // deliveryStep = popUpPostCreation(context);
+          }
       }
     });
   }

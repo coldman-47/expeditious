@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nrj_express/api/livraison_service.dart';
 import 'package:nrj_express/models/livraison.dart';
 import 'package:nrj_express/screens/new_delivery.dart';
-import '../screens/screens.dart';
+import 'package:timeline_tile/timeline_tile.dart';
 
 class Adresses extends StatefulWidget {
   final String title = 'Adresses de la livraison';
@@ -20,6 +20,7 @@ class _AdressesState extends State<Adresses> {
   final adresseLivraisonCtrl = TextEditingController();
   final adresseRecuperationCtrl = TextEditingController();
   final livraisonSrv = LivraisonService();
+  late String status;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -85,6 +86,7 @@ class _AdressesState extends State<Adresses> {
                     onPressed: () async {
                       widget.delivery.lieuDepart = adresseRecuperationCtrl.text;
                       widget.delivery.lieuArrivee = adresseLivraisonCtrl.text;
+                      widget.delivery.status = 'PENDING';
                       var create = await livraisonSrv.create(widget.delivery);
                       if (create == true) {
                         popUpPostCreation(context);
