@@ -1,23 +1,30 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:nrj_express/api/livraison_service.dart';
+import 'package:nrj_express/models/livraison.dart';
+import 'package:nrj_express/screens/new_delivery.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
 class Adresses extends StatefulWidget {
   final String title = 'Adresses de la livraison';
-  final String index = '3';
+  final int index = 3;
   final double stepValue = 1;
+  final Livraison delivery;
 
-  const Adresses({Key? key}) : super(key: key);
+  const Adresses({Key? key, required this.delivery}) : super(key: key);
 
   @override
   _AdressesState createState() => _AdressesState();
 }
 
 class _AdressesState extends State<Adresses> {
+  final adresseLivraisonCtrl = TextEditingController();
+  final adresseRecuperationCtrl = TextEditingController();
+  final livraisonSrv = LivraisonService();
+  late String status;
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         child: Column(
           children: [
             Text('Uniquement sur Dakar!',
@@ -28,31 +35,33 @@ class _AdressesState extends State<Adresses> {
                     color: Colors.orange[700])),
             TimelineTile(
                 beforeLineStyle:
-                    LineStyle(thickness: 1.5, color: Colors.blueGrey),
+                    const LineStyle(thickness: 1.5, color: Colors.blueGrey),
                 isFirst: true,
                 alignment: TimelineAlign.center,
                 indicatorStyle: const IndicatorStyle(
                     padding: EdgeInsets.symmetric(vertical: 7.5),
                     indicator: Icon(Icons.location_pin, color: Colors.green)),
-                startChild: const Padding(
-                    padding: EdgeInsets.all(10),
-                    child: TextField(
-                        decoration: InputDecoration(
+                startChild: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: TextFormField(
+                        controller: adresseRecuperationCtrl,
+                        decoration: const InputDecoration(
                             alignLabelWithHint: true,
                             filled: false,
                             labelText: '* Récupération')))),
             TimelineTile(
                 beforeLineStyle:
-                    LineStyle(thickness: 1.5, color: Colors.blueGrey),
+                    const LineStyle(thickness: 1.5, color: Colors.blueGrey),
                 isLast: true,
                 alignment: TimelineAlign.center,
                 indicatorStyle: const IndicatorStyle(
                     padding: EdgeInsets.symmetric(vertical: 7.5),
                     indicator: Icon(Icons.location_pin, color: Colors.red)),
-                endChild: const Padding(
-                    padding: EdgeInsets.all(10),
-                    child: TextField(
-                        decoration: InputDecoration(
+                endChild: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: TextFormField(
+                        controller: adresseLivraisonCtrl,
+                        decoration: const InputDecoration(
                             alignLabelWithHint: true,
                             filled: false,
                             labelText: '* Livraison')))),
@@ -62,7 +71,7 @@ class _AdressesState extends State<Adresses> {
                   InputDecoration(labelText: 'Commentaire', filled: true),
             ),
             Container(
-                padding: EdgeInsets.all(30),
+                padding: const EdgeInsets.all(30),
                 child: TextButton(
                     child: const Text('CONFIRMER'),
                     style: TextButton.styleFrom(
@@ -74,8 +83,73 @@ class _AdressesState extends State<Adresses> {
                         padding: const EdgeInsets.all(20),
                         backgroundColor: Colors.orange,
                         primary: Colors.white),
-                    onPressed: () {}))
+                    onPressed: () async {
+                      widget.delivery.lieuDepart = adresseRecuperationCtrl.text;
+                      widget.delivery.lieuArrivee = adresseLivraisonCtrl.text;
+                      widget.delivery.status = 'PENDING';
+                      var create = await livraisonSrv.create(widget.delivery);
+                      if (create == true) {
+                        popUpPostCreation(context);
+                      }
+                    }))
           ],
         ));
   }
+}
+
+popUpPostCreation(context) {
+  return showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+            title: const Center(
+                child: Text(
+              'Demande enregistrée',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.orange,
+                  letterSpacing: 0.75),
+            )),
+            content: Container(
+                constraints: const BoxConstraints(maxHeight: 400),
+                child: Column(
+                  children: [
+                    Container(
+                        margin: const EdgeInsets.only(bottom: 10),
+                        constraints: const BoxConstraints(
+                            maxWidth: double.infinity, maxHeight: 250),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(45),
+                            image: const DecorationImage(
+                                image: AssetImage('images/processing.png'),
+                                fit: BoxFit.contain))),
+                    const Text(
+                      'Nous vous contactons dans un instant. Merci.',
+                      textAlign: TextAlign.center,
+                    )
+                  ],
+                )),
+            actions: [
+              TextButton(
+                  style: ButtonStyle(
+                      foregroundColor:
+                          MaterialStateProperty.all(Colors.blueGrey[700])),
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const NewDelivery()));
+                  },
+                  child: Center(
+                      child: Row(
+                    children: const [
+                      Spacer(),
+                      Text('TERMINER ',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, letterSpacing: 1)),
+                      Icon(Icons.done),
+                      Spacer()
+                    ],
+                  )))
+            ],
+          ));
 }
