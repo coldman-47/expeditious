@@ -24,6 +24,7 @@ dependencies:
   http_interceptor: ^1.0.2
   flutter_secure_storage: ^5.0.2
   flutter_dotenv: ^5.0.2
+  web_socket_channel: ^2.1.0
 
 dev_dependencies:
   flutter_test:
@@ -38,7 +39,6 @@ flutter:
   assets:
     - .env
     - images/2fa.png
-    - images/appel.png
     - images/audio.png
     - images/bg.jpg
     - images/call.png
@@ -49,4 +49,5 @@ flutter:
     - images/scooter.png
     - images/smartphone.png
     - images/tricycle.png
+    - images/step1.jpg
   
