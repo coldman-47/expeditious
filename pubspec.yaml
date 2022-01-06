@@ -25,6 +25,7 @@ dependencies:
   flutter_secure_storage: ^5.0.2
   flutter_dotenv: ^5.0.2
   web_socket_channel: ^2.1.0
+  flutter_secure_storage_linux: ^1.1.0
 
 dev_dependencies:
   flutter_test:
@@ -43,6 +44,8 @@ flutter:
     - images/bg.jpg
     - images/call.png
     - images/camionette.png
+    - images/demande.png
+    - images/historique.png
     - images/itineraire.png
     - images/logo.png
     - images/processing.png

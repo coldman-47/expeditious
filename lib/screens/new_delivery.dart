@@ -4,67 +4,15 @@ import 'package:nrj_express/components/categories.dart';
 import 'package:nrj_express/components/choix.dart';
 import 'package:nrj_express/components/record.dart';
 import 'package:nrj_express/models/livraison.dart';
+import 'package:nrj_express/screens/layout.dart';
 
 class NewDelivery extends StatelessWidget {
   const NewDelivery({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        decoration: const BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage('images/bg.jpg'), fit: BoxFit.cover)),
-        child: Scaffold(
-            backgroundColor: Colors.transparent,
-            appBar: AppBar(
-                centerTitle: true,
-                backgroundColor: Colors.transparent,
-                title: const Image(
-                    image: AssetImage('images/logo.png'),
-                    fit: BoxFit.contain,
-                    height: 60,
-                    width: 250),
-                elevation: 0),
-            body: Container(
-                constraints: const BoxConstraints.expand(),
-                padding: const EdgeInsets.symmetric(
-                    vertical: 10, horizontal: 25), //.all(25),
-                child: Container(
-                    padding: const EdgeInsets.all(5),
-                    width: 350,
-                    child: Stack(
-                        clipBehavior: Clip.none,
-                        alignment: Alignment.topCenter,
-                        children: [
-                          Positioned(
-                              child: Container(
-                                  padding: const EdgeInsets.all(20),
-                                  decoration: BoxDecoration(
-                                      color: Colors.blueGrey[900],
-                                      borderRadius: BorderRadius.circular(15)),
-                                  height: 150,
-                                  width: 350,
-                                  child: const Text('DEMANDER UNE LIVRAISON',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 18,
-                                          letterSpacing: 1,
-                                          fontWeight: FontWeight.bold)))),
-                          Positioned(
-                              top: 60,
-                              child: Card(
-                                elevation: 5,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30)),
-                                child: Container(
-                                    width: 350,
-                                    decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(30)),
-                                    child: const LivraisonCtrl()),
-                              ))
-                        ])))));
+    return Layout(
+        title: 'DEMANDER UNE LIVRAISON', child: const LivraisonCtrl());
   }
 }
 
@@ -108,7 +56,7 @@ class _LivraisonCtrlState extends State<LivraisonCtrl> {
           deliveryStep = Record(delivery: livraison);
         } else if (deliveryStep.choice == 'call') {
           // deliveryStep = popUpPostCreation(context);
-          }
+        }
       }
     });
   }

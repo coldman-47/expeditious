@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-
 AllLivraison allLivraisonFromJson(String str) =>
     AllLivraison.fromJson(json.decode(str));
 
@@ -36,17 +35,18 @@ class Livraison {
   String? telephone;
   String? dateLivraison;
   String? status;
+  String? created;
 
   Livraison(
       {this.client,
-     this.lieuDepart,
+      this.lieuDepart,
       this.lieuArrivee,
       this.categorie,
       this.audio,
       this.telephone,
       this.dateLivraison,
-      this.status
-      });
+      this.status,
+      this.created});
 
   factory Livraison.fromJson(Map<String, dynamic> Parsedjson) => Livraison(
         client: Parsedjson["client"],
@@ -57,6 +57,7 @@ class Livraison {
         telephone: Parsedjson["telephone"],
         dateLivraison: Parsedjson["dateLivraison"],
         status: Parsedjson["status"],
+        created: Parsedjson["created"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -64,17 +65,16 @@ class Livraison {
         "lieuDepart": lieuDepart,
         "lieuArrivee": lieuArrivee,
         "categorie": categorie,
-       "status": status,
+        "status": status,
         "audio": audio,
         "telephone": telephone,
         "dateLivraison": dateLivraison,
+        "created": created,
       };
 
-  set setCategorie(categorieId, ) {
+  set setCategorie(
+    categorieId,
+  ) {
     categorie = categorieId;
-   
   }
-  
-
-  
 }
