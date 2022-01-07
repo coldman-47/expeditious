@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:nrj_express/screens/home_screen.dart';
-import 'package:nrj_express/screens/new_delivery.dart';
 import 'package:nrj_express/src/authentication/user_code_form.dart';
 import 'src/authentication/user_phone_form.dart';
 
@@ -86,9 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     image: DecorationImage(
                         image: AssetImage('images/bg.jpg'), fit: BoxFit.cover)),
                 child: page))
-        : HomeScreen(
-            label: '',
-          );
+        : HomeScreen();
   }
 }
 

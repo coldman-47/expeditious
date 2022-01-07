@@ -1,6 +1,6 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:http_interceptor/http/interceptor_contract.dart';
 import 'package:http_interceptor/http_interceptor.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 
 class AccessTokenInterceptor implements InterceptorContract {
   @override
@@ -19,6 +19,20 @@ class AccessTokenInterceptor implements InterceptorContract {
   Future<ResponseData> interceptResponse({required ResponseData data}) async =>
       data;
 }
+
+Future<String> getClientId() async {
+  late String id;
+  const storage = FlutterSecureStorage();
+  try {
+    var token = await storage.read(key: 'token');
+    id = Jwt.parseJwt(token!)['client'];
+  } catch (e) {
+    print(e);
+  }
+  return id;
+}
+
+final Future<String> clientId = getClientId();
 
 final InterceptedClient clientIntercepted =
     InterceptedClient.build(interceptors: [AccessTokenInterceptor()]);

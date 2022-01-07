@@ -5,8 +5,7 @@ import 'package:nrj_express/components/historique.dart';
 import 'package:nrj_express/screens/new_delivery.dart';
 
 class HomeScreen extends StatefulWidget {
-  final String label;
-  HomeScreen({Key? key, required this.label}) : super(key: key);
+  HomeScreen({Key? key}) : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -47,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     MaterialStateProperty.all<Color>(
                                         Colors.blue.shade100)),
                             onPressed: () {
-                              Navigator.pushReplacement(
+                              Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
@@ -111,6 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   'images/historique.png'),
                                               fit: BoxFit.cover)))),
                               const Text('Historique des livraisons',
+                                  textAlign: TextAlign.center,
                                   style: TextStyle(
                                       fontSize: 20,
                                       color: Colors.white,
