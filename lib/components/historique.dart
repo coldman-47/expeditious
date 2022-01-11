@@ -6,22 +6,10 @@ import 'package:nrj_express/models/livraison.dart';
 import 'package:nrj_express/screens/layout.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
-Future<List<Livraison>> fetchLivraison() async {
-  ClientService clientSrv = ClientService();
-  var historique = await clientSrv.historiqueLivraison();
-  return getLivraison(historique);
-}
-
-List<Livraison> getLivraison(res) {
-  List<Livraison> livraisons = [];
-  final parseLivraisons = res["data"];
-  if (parseLivraisons.length > 0) {
-    for (var i in parseLivraisons) {
-      livraisons.add(Livraison.fromJson(i));
-    }
-  }
-  return livraisons;
-}
+int currentPage = 1;
+late int numPages;
+List<Livraison> livraisons = [];
+bool loaded = false;
 
 class Historique extends StatefulWidget {
   const Historique({
@@ -42,11 +30,34 @@ class _HistoriqueState extends State<Historique> {
     });
   }
 
+  Future<List<Livraison>> fetchLivraison({int numPage = 1}) async {
+    ClientService clientSrv = ClientService();
+    loaded = false;
+    var historique = await clientSrv.historiqueLivraison(page: numPage);
+    // numPages = historique["totalPages"];
+    return getLivraison(historique);
+  }
+
+  List<Livraison> getLivraison(res) {
+    final parseLivraisons = res["data"];
+    numPages = res["totalPages"];
+    if (parseLivraisons.length > 0) {
+      print(parseLivraisons.length);
+      for (var i in parseLivraisons) {
+        livraisons.add(Livraison.fromJson(i));
+      }
+      setState(() {
+        loaded = true;
+      });
+    }
+    return livraisons;
+  }
+
   @override
   void initState() {
     _loadCategories();
-    super.initState();
     fetchLivraison();
+    super.initState();
   }
 
   @override
@@ -56,65 +67,71 @@ class _HistoriqueState extends State<Historique> {
         child: SingleChildScrollView(
             child: Container(
                 height: 500,
-                child: FutureBuilder<List<Livraison>>(
-                    future: fetchLivraison(),
-                    builder: (context, AsyncSnapshot snapshot) {
-                      if (snapshot.hasError) {
-                        return Text(snapshot.error.toString());
-                      }
-                      if (snapshot.hasData) {
-                        return ListView.builder(
-                            itemCount: snapshot.data!.length,
-                            itemBuilder: (context, i) {
-                              var livraison = snapshot.data[i];
-                              for (var categorie in categories) {
-                                if (livraison.categorie == categorie['_id']) {
-                                  livraison.categorie = categorie['label'];
-                                }
-                              }
-                              return Card(
-                                  child: Column(
-                                children: [
-                                  ListTile(
-                                      onTap: () =>
-                                          _ShowDialogFun(context, livraison),
-                                      title: Row(
-                                        children: [
-                                          Text(
-                                            livraison.lieuDepart.toUpperCase(),
-                                            style: TextStyle(
-                                                color: Colors.blueGrey[700]),
-                                          ),
-                                          const Icon(Icons.arrow_right_sharp),
-                                          Text(
-                                            livraison.lieuArrivee.toUpperCase(),
-                                            style: const TextStyle(
-                                                color: Colors.orange),
-                                          )
-                                        ],
+                child: loaded
+                    ? ListView.builder(
+                        itemCount: livraisons.length,
+                        itemBuilder: (context, i) {
+                          if (i + 1 >= livraisons.length &&
+                              currentPage <= numPages) {
+                            currentPage++;
+                            fetchLivraison(numPage: currentPage);
+                            return const Center(
+                                child: CircularProgressIndicator(
+                              color: Colors.orange,
+                            ));
+                          }
+                          print('ListView.builder is building index $i');
+                          var livraison = livraisons[i];
+                          for (var categorie in categories) {
+                            if (livraison.categorie == categorie['_id']) {
+                              livraison.categorie = categorie['label'];
+                            }
+                          }
+                          return Card(
+                              child: Column(
+                            children: [
+                              ListTile(
+                                  onTap: () =>
+                                      _ShowDialogFun(context, livraison),
+                                  title: Row(
+                                    children: [
+                                      Text(
+                                        livraison.lieuDepart != null
+                                            ? livraison.lieuDepart!
+                                                .toUpperCase()
+                                            : '',
+                                        style: TextStyle(
+                                            color: Colors.blueGrey[700]),
                                       ),
-                                      trailing: Icon(livraison.status == 'DONE'
-                                          ? Icons.check
-                                          : Icons.hourglass_bottom_rounded),
-                                      iconColor: livraison.status == 'DONE'
-                                          ? Colors.lightGreen[700]
-                                          : Colors.amber),
-                                  Text(
-                                      DateFormat('dd/MM/yyyy à hh:mm').format(
-                                        DateTime.parse(livraison.created),
-                                      ),
-                                      style:
-                                          const TextStyle(color: Colors.grey))
-                                ],
-                              ));
-                            });
-                      } else {
-                        return const Center(
-                            child: CircularProgressIndicator(
-                          color: Colors.orange,
-                        ));
-                      }
-                    }))));
+                                      const Icon(Icons.arrow_right_sharp),
+                                      Text(
+                                        livraison.lieuArrivee != null
+                                            ? livraison.lieuArrivee!
+                                                .toUpperCase()
+                                            : '',
+                                        style: const TextStyle(
+                                            color: Colors.orange),
+                                      )
+                                    ],
+                                  ),
+                                  trailing: Icon(livraison.status == 'DONE'
+                                      ? Icons.check
+                                      : Icons.hourglass_bottom_rounded),
+                                  iconColor: livraison.status == 'DONE'
+                                      ? Colors.lightGreen[700]
+                                      : Colors.amber),
+                              Text(
+                                  DateFormat('dd/MM/yyyy à hh:mm').format(
+                                    DateTime.parse(livraison.created),
+                                  ),
+                                  style: const TextStyle(color: Colors.grey))
+                            ],
+                          ));
+                        })
+                    : const Center(
+                        child: CircularProgressIndicator(
+                        color: Colors.orange,
+                      )))));
   }
 }
 

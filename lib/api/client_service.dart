@@ -8,11 +8,12 @@ import 'interceptor/access_token.dart';
 class ClientService {
   InterceptedClient httpCli = clientIntercepted;
 
-  Future<Object> historiqueLivraison() async {
+  Future<Object> historiqueLivraison({int page = 1}) async {
     String id = await clientId;
     dynamic historique = [];
     try {
-      var uri = Uri.parse(dotenv.env['API_URL']! + "clients/$id/historique");
+      var uri =
+          Uri.parse(dotenv.env['API_URL']! + "clients/$id/historique?$page");
       final response = await httpCli.get(uri);
       if (response.statusCode == 200) {
         historique = jsonDecode(response.body);

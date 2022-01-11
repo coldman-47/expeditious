@@ -35,7 +35,7 @@ class Livraison {
   String? telephone;
   String? dateLivraison;
   String? status;
-  String? created;
+  String created;
 
   Livraison(
       {this.client,
@@ -46,7 +46,7 @@ class Livraison {
       this.telephone,
       this.dateLivraison,
       this.status,
-      this.created});
+      this.created = ''});
 
   factory Livraison.fromJson(Map<String, dynamic> Parsedjson) => Livraison(
         client: Parsedjson["client"],

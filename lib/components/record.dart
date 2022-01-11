@@ -21,9 +21,9 @@ class Record extends StatefulWidget {
 }
 
 class _RecordState extends State<Record> {
-  late FlutterSoundRecorder _myRecorder;
+  FlutterSoundRecorder _myRecorder = FlutterSoundRecorder();
   final audioPlayer = AssetsAudioPlayer();
-  late String filePath;
+  String filePath = '/sdcard/Download/Express/audio.wav';
   bool _isRecord = false;
   bool _isPlaying = false;
 
@@ -44,12 +44,9 @@ class _RecordState extends State<Record> {
                       MaterialStateProperty.all<Color>(Colors.blue.shade100)),
               onPressed: () {},
               child: Container(
-                  height: 150,
-                  width: 175,
-                  decoration: const BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage('images/van.png'),
-                          fit: BoxFit.contain)))),
+                height: 150,
+                width: 175,
+              )),
         ]),
         const SizedBox(
           height: 56,
@@ -100,7 +97,6 @@ class _RecordState extends State<Record> {
   }
 
   void startIt() async {
-    filePath = '/sdcard/Download/Express/audio.wav';
     _myRecorder = FlutterSoundRecorder();
     await _myRecorder.openAudioSession(
         focus: AudioFocus.requestFocusAndStopOthers,
@@ -152,7 +148,7 @@ class _RecordState extends State<Record> {
   }
 
   void sendAudio() {
-    Livraison delivery = Livraison();
+    Livraison delivery = Livraison(created: '');
 
     delivery.audio = audioPlayer
         .open(Audio.file("/sdcard/Download/Express/audio.wav"))
