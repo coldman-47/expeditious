@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nrj_express/api/code_confirmation.dart';
-import 'package:nrj_express/screens/new_delivery.dart';
+import 'package:nrj_express/screens/home_screen.dart';
 
 class UserCodeForm extends StatefulWidget {
   final bool page;
@@ -98,7 +98,7 @@ class _UserCodeFormState extends State<UserCodeForm> {
                                                       context,
                                                       MaterialPageRoute(
                                                           builder: (context) =>
-                                                              const NewDelivery()))
+                                                              HomeScreen()))
                                                 }
                                             });
                                   },

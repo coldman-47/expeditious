@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 
-class RecordScreen extends StatefulWidget {
-  final String title = 'Envoyez les adresses de la livraison par message vocal';
-  final int index = 3;
-  final double stepValue = 0.33;
-
-  const RecordScreen({Key? key}) : super(key: key);
+class Layout extends StatefulWidget {
+  String title = '';
+  final Widget child;
+  Layout({Key? key, required this.title, required this.child})
+      : super(key: key);
 
   @override
-  _RecordScreenState createState() => _RecordScreenState();
+  _LayoutState createState() => _LayoutState();
 }
 
-class _RecordScreenState extends State<RecordScreen> {
+class _LayoutState extends State<Layout> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -21,13 +20,13 @@ class _RecordScreenState extends State<RecordScreen> {
         child: Scaffold(
             backgroundColor: Colors.transparent,
             appBar: AppBar(
+                centerTitle: true,
                 backgroundColor: Colors.transparent,
                 title: const Image(
                     image: AssetImage('images/logo.png'),
                     fit: BoxFit.contain,
-                    height: 75,
+                    height: 60,
                     width: 250),
-                centerTitle: true,
                 elevation: 0),
             body: Container(
                 constraints: const BoxConstraints.expand(),
@@ -48,11 +47,11 @@ class _RecordScreenState extends State<RecordScreen> {
                                       borderRadius: BorderRadius.circular(15)),
                                   height: 150,
                                   width: 350,
-                                  child: const Text('DEMANDER UNE LIVRAISON',
+                                  child: Text(widget.title,
                                       textAlign: TextAlign.center,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           color: Colors.white,
-                                          fontSize: 18,
+                                          fontSize: 16,
                                           letterSpacing: 1,
                                           fontWeight: FontWeight.bold)))),
                           Positioned(
@@ -62,11 +61,12 @@ class _RecordScreenState extends State<RecordScreen> {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(30)),
                                 child: Container(
+                                    clipBehavior: Clip.hardEdge,
                                     width: 350,
                                     decoration: BoxDecoration(
                                         borderRadius:
                                             BorderRadius.circular(30)),
-                                    child: Text('')),
+                                    child: widget.child),
                               ))
                         ])))));
   }
