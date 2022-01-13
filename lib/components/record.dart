@@ -1,10 +1,14 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:music_visualizer/music_visualizer.dart';
 import 'package:nrj_express/api/livraison_service.dart';
+import 'package:nrj_express/components/modal_post_creation.dart';
 import 'package:nrj_express/models/livraison.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:path/path.dart' as path;
@@ -21,139 +25,192 @@ class Record extends StatefulWidget {
 }
 
 class _RecordState extends State<Record> {
-  FlutterSoundRecorder _myRecorder = FlutterSoundRecorder();
+  late FlutterSoundRecorder _myRecorder;
   final audioPlayer = AssetsAudioPlayer();
-  String filePath = '/sdcard/Download/Express/audio.wav';
+  String filePath = '';
   bool _isRecord = false;
   bool _isPlaying = false;
+  late Duration audioDuration;
+  final List<Color> colors = [
+    Colors.orange[700]!,
+    Colors.blue[900]!,
+    Colors.blueGrey,
+    Colors.blue[100]!,
+    Colors.blueGrey[900]!,
+    Colors.lightBlue[300]!
+  ];
+  late dynamic wave = Container();
+  bool sending = false;
+
+  final List<int> duration = [900, 700, 600, 800, 500];
 
   @override
   void initState() {
     super.initState();
-    // startIt();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ButtonBar(alignment: MainAxisAlignment.center, children: [
-          ElevatedButton(
-              style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.blue.shade100)),
-              onPressed: () {},
-              child: Container(
-                height: 150,
-                width: 175,
-              )),
-        ]),
-        const SizedBox(
-          height: 56,
-        ),
-        Center(
-            child: Column(
+    return SizedBox(
+        height: 400,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
+            Card(
+                child: Column(children: [
+              SizedBox(
+                  height: 100,
+                  width: 250,
+                  child: Opacity(
+                    child: wave,
+                    opacity: _isPlaying ? 1 : 0,
+                  )),
+              TextButton(
+                child: Icon(_isPlaying ? Icons.stop : Icons.play_arrow),
+                style: TextButton.styleFrom(
+                    primary: Colors.blueGrey[filePath != '' ? 900 : 200]),
+                onPressed: () {
+                  if (filePath != '') {
+                    if (!_isPlaying) startPlaying();
+                    if (_isPlaying) stopPlaying();
+                    setState(() {
+                      _isPlaying = !_isPlaying;
+                    });
+                  }
+                },
+              )
+            ])),
             ElevatedButton(
-              child: Icon(_isRecord ? Icons.stop : Icons.mic),
-              onPressed: () {
-                setState(() {
-                  _isRecord = !_isRecord;
-                });
-                if (_isRecord) record();
-                if (!_isRecord) stopRecord();
-              },
+              child: GestureDetector(
+                child: Icon(Icons.mic, size: _isRecord ? 40 : 35),
+                onLongPress: () {
+                  startIt();
+                  record();
+                },
+                onLongPressUp: () {
+                  stopRecord();
+                },
+              ),
+              style: ElevatedButton.styleFrom(
+                  primary:
+                      !_isRecord ? Colors.blueGrey[900] : Colors.amber[800],
+                  shape: const CircleBorder(),
+                  padding: EdgeInsets.all(_isRecord ? 20 : 15)),
+              onPressed: () {},
             ),
-            const SizedBox(
-              height: 56,
-            ),
-            ElevatedButton(
-              child: Icon(!_isPlaying ? Icons.stop : Icons.play_arrow),
-              onPressed: () {
-                setState(() {
-                  _isPlaying = !_isPlaying;
-                });
-                if (!_isPlaying) startPlaying();
-                if (_isPlaying) stopPlaying();
-              },
-            ),
-            ElevatedButton(
-              child: const Text("Envoyer"),
-              onPressed: startPlaying,
-            ),
-            SizedBox(
-              height: 56,
-            ),
-            ElevatedButton(
-              child: Icon(Icons.send),
-              onPressed: () {
-                sendAudio();
-              },
-            )
+            Container(
+                constraints: const BoxConstraints(maxWidth: 225),
+                child: ElevatedButton(
+                    style: TextButton.styleFrom(
+                        backgroundColor: Colors.amber[700]),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        const Text('SOUMETTRE  ',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                letterSpacing: 1,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16)),
+                        sending
+                            ? const CircularProgressIndicator(
+                                color: Colors.white,
+                              )
+                            : const Icon(Icons.send)
+                      ],
+                    ),
+                    onPressed: () async {
+                      var submit = await sendAudio();
+                      print(submit);
+                      if (submit == true) {
+                        popUpPostCreation(context);
+                      }
+                    }))
           ],
-        ))
-      ],
-    );
+        ));
   }
 
   void startIt() async {
-    _myRecorder = FlutterSoundRecorder();
-    await _myRecorder.openAudioSession(
-        focus: AudioFocus.requestFocusAndStopOthers,
-        category: SessionCategory.playAndRecord,
-        mode: SessionMode.modeDefault,
-        device: AudioDevice.speaker);
-    await _myRecorder.setSubscriptionDuration(const Duration(milliseconds: 10));
-    await initializeDateFormatting();
-
-    await Permission.microphone.request();
-    await Permission.storage.request();
-    await Permission.manageExternalStorage.request();
+    if (await Permission.microphone.isGranted) {
+      _myRecorder = FlutterSoundRecorder();
+      await _myRecorder.openAudioSession(
+          focus: AudioFocus.requestFocusAndStopOthers,
+          category: SessionCategory.playAndRecord,
+          mode: SessionMode.modeDefault,
+          device: AudioDevice.speaker);
+      await _myRecorder
+          .setSubscriptionDuration(const Duration(milliseconds: 10));
+      await initializeDateFormatting();
+    } else {
+      await Permission.microphone.request();
+    }
   }
 
   Future<void> record() async {
+    Directory tempDir = await getTemporaryDirectory();
+    filePath = tempDir.path + '/new_delivery.wav';
     Directory dir = Directory(path.dirname(filePath));
     if (!dir.existsSync()) {
       dir.createSync();
     }
-    _myRecorder.openAudioSession();
     await _myRecorder.startRecorder(
       toFile: filePath,
       codec: Codec.pcm16WAV,
     );
-
-    StreamSubscription _recorderSubscription =
-        _myRecorder.onProgress!.listen((e) {
-      // var date = DateTime.fromMillisecondsSinceEpoch(e.duration.inMilliseconds,
-      //     isUtc: true);
+    setState(() {
+      _isRecord = true;
+      wave = MusicVisualizer(
+        barCount: 45,
+        colors: colors,
+        duration: duration,
+        curve: Curves.bounceInOut,
+      );
     });
-    _recorderSubscription.cancel();
   }
 
-  Future<String> stopRecord() async {
-    _myRecorder.closeAudioSession();
-    return await _myRecorder.stopRecorder().then((value) => value.toString());
+  Future<void> stopRecord() async {
+    await _myRecorder.stopRecorder().then((value) => value.toString());
+    setState(() {
+      _isRecord = false;
+    });
+    return await _myRecorder.closeAudioSession();
   }
 
   Future<void> startPlaying() async {
-    audioPlayer.open(
+    await audioPlayer.open(
       Audio.file(filePath),
       autoStart: true,
       showNotification: true,
     );
+    audioDuration = audioPlayer.realtimePlayingInfos.value.duration;
+    Future.delayed(audioDuration, () {
+      if (_isPlaying) {
+        setState(() {
+          _isPlaying = false;
+        });
+      }
+    });
   }
 
   Future<void> stopPlaying() async {
     audioPlayer.stop();
   }
 
-  void sendAudio() {
-    Livraison delivery = Livraison(created: '');
-
-    delivery.audio = audioPlayer
-        .open(Audio.file("/sdcard/Download/Express/audio.wav"))
-        .toString();
+  Future<dynamic> sendAudio() async {
+    widget.delivery.status = 'NEW';
+    try {
+      final File fileDir = File(filePath);
+      dynamic file = await fileDir.readAsBytes();
+      widget.delivery.audio = base64.encode(file);
+    } catch (e) {
+      print("Couldn't read file");
+    }
     final livraisonSrv = LivraisonService();
-    livraisonSrv.create(delivery);
+    setState(() {
+      sending = true;
+    });
+    if (sending) {
+      return await livraisonSrv.create(widget.delivery);
+    }
   }
 }

@@ -65,7 +65,7 @@ class _HistoriqueState extends State<Historique> {
     return Layout(
         title: 'Historique des livraisons',
         child: SingleChildScrollView(
-            child: Container(
+            child: SizedBox(
                 height: 500,
                 child: loaded
                     ? ListView.builder(
@@ -80,7 +80,6 @@ class _HistoriqueState extends State<Historique> {
                               color: Colors.orange,
                             ));
                           }
-                          print('ListView.builder is building index $i');
                           var livraison = livraisons[i];
                           for (var categorie in categories) {
                             if (livraison.categorie == categorie['_id']) {
@@ -121,7 +120,7 @@ class _HistoriqueState extends State<Historique> {
                                       ? Colors.lightGreen[700]
                                       : Colors.amber),
                               Text(
-                                  DateFormat('dd/MM/yyyy à hh:mm').format(
+                                  DateFormat('dd/MM/yyyy à HH:mm').format(
                                     DateTime.parse(livraison.created),
                                   ),
                                   style: const TextStyle(color: Colors.grey))
@@ -293,7 +292,7 @@ _ShowDialogFun(context, livraison) {
                                     ),
                                     Text(
                                         'Créée le ' +
-                                            DateFormat('dd/MM/yyyy à hh:mm')
+                                            DateFormat('dd/MM/yyyy à HH:mm')
                                                 .format(
                                               DateTime.parse(livraison.created),
                                             ),

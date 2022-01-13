@@ -27,6 +27,7 @@ class LivraisonService {
     } catch (e) {
       print(e);
     }
+    print(reqResponse);
     return reqResponse;
   }
 }
