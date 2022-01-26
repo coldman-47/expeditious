@@ -30,7 +30,7 @@ class _RecordState extends State<Record> {
   String filePath = '';
   bool _isRecord = false;
   bool _isPlaying = false;
-  late Duration audioDuration;
+  Duration audioDuration = const Duration(seconds: 0);
   final List<Color> colors = [
     Colors.orange[700]!,
     Colors.blue[900]!,
@@ -41,6 +41,8 @@ class _RecordState extends State<Record> {
   ];
   late dynamic wave = Container();
   bool sending = false;
+  double _currentSliderValue = 0;
+  late Timer _timer;
 
   final List<int> duration = [900, 700, 600, 800, 500];
 
@@ -60,7 +62,7 @@ class _RecordState extends State<Record> {
                 child: Column(children: [
               SizedBox(
                   height: 100,
-                  width: 250,
+                  width: 300,
                   child: Opacity(
                     child: wave,
                     opacity: _isPlaying ? 1 : 0,
@@ -74,11 +76,25 @@ class _RecordState extends State<Record> {
                     if (!_isPlaying) startPlaying();
                     if (_isPlaying) stopPlaying();
                     setState(() {
+                      print('boom');
                       _isPlaying = !_isPlaying;
                     });
                   }
                 },
-              )
+              ),
+              (_isPlaying)
+                  ? Slider(
+                      activeColor: Colors.orange,
+                      value: _currentSliderValue,
+                      max: audioDuration.inSeconds.toDouble(),
+                      label: _currentSliderValue.round().toString(),
+                      onChanged: (double value) {
+                        setState(() {
+                          null;
+                        });
+                      },
+                    )
+                  : SizedBox(height: 50)
             ])),
             ElevatedButton(
               child: GestureDetector(
@@ -160,7 +176,7 @@ class _RecordState extends State<Record> {
     setState(() {
       _isRecord = true;
       wave = MusicVisualizer(
-        barCount: 45,
+        barCount: 20,
         colors: colors,
         duration: duration,
         curve: Curves.bounceInOut,
@@ -177,23 +193,48 @@ class _RecordState extends State<Record> {
   }
 
   Future<void> startPlaying() async {
-    await audioPlayer.open(
-      Audio.file(filePath),
-      autoStart: true,
-      showNotification: true,
-    );
+    print(_isPlaying);
+    Duration period = const Duration(seconds: 1);
+    await audioPlayer
+        .open(
+          Audio.file(filePath),
+          autoStart: true,
+          showNotification: true,
+        )
+        .then((value) => {
+              if (_isPlaying)
+                _timer = Timer.periodic(
+                  period,
+                  (Timer timer) {
+                    setState(() {
+                      if (_currentSliderValue >=
+                          audioDuration.inSeconds.toDouble()) {
+                        _currentSliderValue = 0;
+                        _timer.cancel();
+                      } else {
+                        _currentSliderValue += period.inSeconds.toDouble();
+                      }
+                    });
+                  },
+                )
+            });
     audioDuration = audioPlayer.realtimePlayingInfos.value.duration;
     Future.delayed(audioDuration, () {
-      if (_isPlaying) {
-        setState(() {
-          _isPlaying = false;
-        });
-      }
+      setState(() {
+        _timer.cancel();
+        _isPlaying = false;
+        _currentSliderValue = 0;
+      });
     });
   }
 
   Future<void> stopPlaying() async {
     audioPlayer.stop();
+    _timer.cancel();
+  }
+
+  Future<void> controlAudio() async {
+    await audioPlayer.seek(Duration(seconds: _currentSliderValue.toInt()));
   }
 
   Future<dynamic> sendAudio() async {
