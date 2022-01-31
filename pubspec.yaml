@@ -25,10 +25,10 @@ dependencies:
   flutter_secure_storage: ^5.0.2
   flutter_dotenv: ^5.0.2
   web_socket_channel: ^2.1.0
-  flutter_secure_storage_linux: ^1.1.0
   jwt_decode: ^0.3.1
   path_provider: ^2.0.8
   music_visualizer: ^1.0.2
+  flutter_secure_storage_linux: ^1.1.0
 
 dev_dependencies:
   flutter_test:

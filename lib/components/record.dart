@@ -47,11 +47,6 @@ class _RecordState extends State<Record> {
   final List<int> duration = [900, 700, 600, 800, 500];
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return SizedBox(
         height: 400,
@@ -76,7 +71,6 @@ class _RecordState extends State<Record> {
                     if (!_isPlaying) startPlaying();
                     if (_isPlaying) stopPlaying();
                     setState(() {
-                      print('boom');
                       _isPlaying = !_isPlaying;
                     });
                   }
@@ -94,13 +88,13 @@ class _RecordState extends State<Record> {
                         });
                       },
                     )
-                  : SizedBox(height: 50)
+                  : const SizedBox(height: 50)
             ])),
             ElevatedButton(
               child: GestureDetector(
                 child: Icon(Icons.mic, size: _isRecord ? 40 : 35),
-                onLongPress: () {
-                  startIt();
+                onLongPress: () async {
+                  await startIt();
                   record();
                 },
                 onLongPressUp: () {
@@ -137,7 +131,6 @@ class _RecordState extends State<Record> {
                     ),
                     onPressed: () async {
                       var submit = await sendAudio();
-                      print(submit);
                       if (submit == true) {
                         popUpPostCreation(context);
                       }
@@ -146,20 +139,24 @@ class _RecordState extends State<Record> {
         ));
   }
 
-  void startIt() async {
+  startIt() async {
     if (await Permission.microphone.isGranted) {
-      _myRecorder = FlutterSoundRecorder();
-      await _myRecorder.openAudioSession(
-          focus: AudioFocus.requestFocusAndStopOthers,
-          category: SessionCategory.playAndRecord,
-          mode: SessionMode.modeDefault,
-          device: AudioDevice.speaker);
-      await _myRecorder
-          .setSubscriptionDuration(const Duration(milliseconds: 10));
-      await initializeDateFormatting();
+      await getRecorderReady();
     } else {
       await Permission.microphone.request();
+      getRecorderReady();
     }
+  }
+
+  getRecorderReady() async {
+    _myRecorder = FlutterSoundRecorder();
+    await _myRecorder.openAudioSession(
+        focus: AudioFocus.requestFocusAndStopOthers,
+        category: SessionCategory.playAndRecord,
+        mode: SessionMode.modeDefault,
+        device: AudioDevice.speaker);
+    await _myRecorder.setSubscriptionDuration(const Duration(milliseconds: 10));
+    await initializeDateFormatting();
   }
 
   Future<void> record() async {
@@ -193,7 +190,6 @@ class _RecordState extends State<Record> {
   }
 
   Future<void> startPlaying() async {
-    print(_isPlaying);
     Duration period = const Duration(seconds: 1);
     await audioPlayer
         .open(
