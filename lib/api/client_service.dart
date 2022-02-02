@@ -10,10 +10,10 @@ class ClientService {
 
   Future<Object> historiqueLivraison({int page = 1}) async {
     String id = await clientId;
-    dynamic historique = [];
+    Map<String, dynamic> historique = {'totalPages': 0, 'data': []};
     try {
-      var uri =
-          Uri.parse(dotenv.env['API_URL']! + "clients/$id/historique?$page");
+      var uri = Uri.parse(
+          dotenv.env['API_URL']! + "/api/clients/$id/historique?page=$page");
       final response = await httpCli.get(uri);
       if (response.statusCode == 200) {
         historique = jsonDecode(response.body);
@@ -23,6 +23,6 @@ class ClientService {
     } catch (e) {
       print(e);
     }
-    return historique;
+    return historique as Map<String, dynamic>;
   }
 }

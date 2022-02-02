@@ -3,6 +3,7 @@ import 'package:http_interceptor/http/intercepted_client.dart';
 import 'package:nrj_express/api/interceptor/access_token.dart';
 import 'package:nrj_express/components/historique.dart';
 import 'package:nrj_express/screens/new_delivery.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key? key}) : super(key: key);
@@ -13,6 +14,18 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  void getMicPermission() async {
+    if (await Permission.microphone.isGranted) {
+      await Permission.microphone.request();
+    }
+  }
+
+  @override
+  void initState() {
+    getMicPermission();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(

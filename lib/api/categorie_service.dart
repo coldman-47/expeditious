@@ -11,7 +11,7 @@ class CategorieService {
   Future<List> getAll() async {
     dynamic categories = [];
     try {
-      var uri = Uri.parse(dotenv.env['API_URL']! + "categories");
+      var uri = Uri.parse(dotenv.env['API_URL']! + "/api/categories");
       final response = await httpCli.get(uri);
       if (response.statusCode == 200) {
         categories = jsonDecode(response.body) as List;

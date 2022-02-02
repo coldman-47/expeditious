@@ -144,7 +144,7 @@ class _RecordState extends State<Record> {
       await getRecorderReady();
     } else {
       await Permission.microphone.request();
-      getRecorderReady();
+      await getRecorderReady();
     }
   }
 

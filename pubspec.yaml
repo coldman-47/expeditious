@@ -29,6 +29,7 @@ dependencies:
   path_provider: ^2.0.8
   music_visualizer: ^1.0.2
   flutter_secure_storage_linux: ^1.1.0
+  socket_io_client: ^2.0.0-beta.1
 
 dev_dependencies:
   flutter_test:

@@ -12,7 +12,7 @@ class LivraisonService {
   Future<Object> create(Livraison livraison) async {
     late dynamic reqResponse;
     try {
-      var uri = Uri.parse(dotenv.env['API_URL']! + "livraisons/add");
+      var uri = Uri.parse(dotenv.env['API_URL']! + "/api/livraisons/add");
       final response = await httpCli.post(uri,
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',

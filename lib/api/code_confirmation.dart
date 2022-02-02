@@ -12,7 +12,7 @@ class CodeConfirmation {
   Future<bool> confirm(String telephone, String code) async {
     bool authenticated = false;
     try {
-      var uri = Uri.parse(dotenv.env['API_URL']! + "auth/confirm");
+      var uri = Uri.parse(dotenv.env['API_URL']! + "/api/auth/confirm");
       final response = await httpCli.post(uri,
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
