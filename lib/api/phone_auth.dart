@@ -7,7 +7,7 @@ class PhoneAuth {
   Future<bool> login(String telephone) async {
     bool authenticated = false;
     try {
-      var uri = Uri.parse(dotenv.env['API_URL']! + "auth");
+      var uri = Uri.parse(dotenv.env['API_URL']! + "/api/auth");
       final response = await http.post(uri,
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',

@@ -1,10 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
 import 'package:nrj_express/api/categorie_service.dart';
 import 'package:nrj_express/api/client_service.dart';
 import 'package:nrj_express/models/livraison.dart';
 import 'package:nrj_express/screens/layout.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 import 'package:timeline_tile/timeline_tile.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 int currentPage = 1;
 late int numPages;
@@ -30,10 +35,10 @@ class _HistoriqueState extends State<Historique> {
     });
   }
 
-  Future<List<Livraison>> fetchLivraison({int numPage = 1}) async {
+  Future<List<Livraison>> fetchLivraison() async {
     ClientService clientSrv = ClientService();
     loaded = false;
-    var historique = await clientSrv.historiqueLivraison(page: numPage);
+    var historique = await clientSrv.historiqueLivraison(page: currentPage);
     // numPages = historique["totalPages"];
     return getLivraison(historique);
   }
@@ -42,7 +47,6 @@ class _HistoriqueState extends State<Historique> {
     final parseLivraisons = res["data"];
     numPages = res["totalPages"];
     if (parseLivraisons.length > 0) {
-      print(parseLivraisons.length);
       for (var i in parseLivraisons) {
         livraisons.add(Livraison.fromJson(i));
       }
@@ -58,6 +62,7 @@ class _HistoriqueState extends State<Historique> {
     _loadCategories();
     fetchLivraison();
     super.initState();
+    listenToDeliverUpdates();
   }
 
   @override
@@ -66,21 +71,21 @@ class _HistoriqueState extends State<Historique> {
         title: 'Historique des livraisons',
         child: SingleChildScrollView(
             child: Container(
+                padding: EdgeInsets.all(12.5),
                 height: 500,
                 child: loaded
                     ? ListView.builder(
                         itemCount: livraisons.length,
                         itemBuilder: (context, i) {
                           if (i + 1 >= livraisons.length &&
-                              currentPage <= numPages) {
+                              currentPage < numPages) {
                             currentPage++;
-                            fetchLivraison(numPage: currentPage);
+                            fetchLivraison();
                             return const Center(
                                 child: CircularProgressIndicator(
                               color: Colors.orange,
                             ));
                           }
-                          print('ListView.builder is building index $i');
                           var livraison = livraisons[i];
                           for (var categorie in categories) {
                             if (livraison.categorie == categorie['_id']) {
@@ -88,50 +93,104 @@ class _HistoriqueState extends State<Historique> {
                             }
                           }
                           return Card(
-                              child: Column(
-                            children: [
-                              ListTile(
-                                  onTap: () =>
-                                      _ShowDialogFun(context, livraison),
-                                  title: Row(
+                              margin: EdgeInsets.only(top: 10, bottom: 10),
+                              elevation: 0,
+                              color: livraison.status == 'NEW'
+                                  ? Colors.orange[50]
+                                  : livraison.status != 'DONE'
+                                      ? Colors.lightBlue[50]
+                                      : Colors.green[50],
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15)),
+                              child: Padding(
+                                  padding: EdgeInsets.all(5),
+                                  child: Column(
                                     children: [
-                                      Text(
-                                        livraison.lieuDepart != null
-                                            ? livraison.lieuDepart!
-                                                .toUpperCase()
-                                            : '',
-                                        style: TextStyle(
-                                            color: Colors.blueGrey[700]),
-                                      ),
-                                      const Icon(Icons.arrow_right_sharp),
-                                      Text(
-                                        livraison.lieuArrivee != null
-                                            ? livraison.lieuArrivee!
-                                                .toUpperCase()
-                                            : '',
-                                        style: const TextStyle(
-                                            color: Colors.orange),
-                                      )
+                                      ListTile(
+                                          minVerticalPadding: 15,
+                                          isThreeLine: true,
+                                          dense: true,
+                                          subtitle: Text(
+                                              DateFormat('dd/MM/yyyy à HH:mm')
+                                                  .format(
+                                                DateTime.parse(
+                                                    livraison.created),
+                                              ),
+                                              style: const TextStyle(
+                                                  color: Colors.grey)),
+                                          onTap: () => _ShowDialogFun(
+                                              context, livraison),
+                                          title: livraison.status != 'NEW'
+                                              ? Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Text(
+                                                      livraison.lieuDepart !=
+                                                              null
+                                                          ? capitalize(livraison
+                                                              .lieuDepart!)
+                                                          : '',
+                                                      textAlign: TextAlign.left,
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          color: Colors
+                                                              .blueGrey[700]),
+                                                    ),
+                                                    const Icon(Icons
+                                                        .arrow_forward_sharp),
+                                                    Text(
+                                                      livraison.lieuArrivee !=
+                                                              null
+                                                          ? capitalize(livraison
+                                                              .lieuArrivee!)
+                                                          : '',
+                                                      style: const TextStyle(
+                                                          color: Colors.orange,
+                                                          fontWeight:
+                                                              FontWeight.w600),
+                                                    )
+                                                  ],
+                                                )
+                                              : Text(
+                                                  'Demande en attente de prise en charge',
+                                                  style: TextStyle(
+                                                      color: Colors
+                                                          .blueGrey[400])),
+                                          trailing: Icon(livraison.status ==
+                                                  'DONE'
+                                              ? Icons.check
+                                              : Icons.hourglass_bottom_rounded),
+                                          iconColor: livraison.status == 'DONE'
+                                              ? Colors.lightGreen[700]
+                                              : Colors.amber)
                                     ],
-                                  ),
-                                  trailing: Icon(livraison.status == 'DONE'
-                                      ? Icons.check
-                                      : Icons.hourglass_bottom_rounded),
-                                  iconColor: livraison.status == 'DONE'
-                                      ? Colors.lightGreen[700]
-                                      : Colors.amber),
-                              Text(
-                                  DateFormat('dd/MM/yyyy à hh:mm').format(
-                                    DateTime.parse(livraison.created),
-                                  ),
-                                  style: const TextStyle(color: Colors.grey))
-                            ],
-                          ));
+                                  )));
                         })
                     : const Center(
                         child: CircularProgressIndicator(
                         color: Colors.orange,
                       )))));
+  }
+
+  void listenToDeliverUpdates() {
+    try {
+      IO.Socket socket = IO.io(dotenv.env['API_URL'],
+          OptionBuilder().setTransports(['websocket']).build());
+      socket.on('api/livraison/updated', (data) {
+        int idx =
+            livraisons.indexWhere((livraison) => livraison.id == data['_id']);
+        if (idx != -1) {
+          setState(() {
+            livraisons[idx] = Livraison.fromJson(data);
+          });
+        }
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 }
 
@@ -293,7 +352,7 @@ _ShowDialogFun(context, livraison) {
                                     ),
                                     Text(
                                         'Créée le ' +
-                                            DateFormat('dd/MM/yyyy à hh:mm')
+                                            DateFormat('dd/MM/yyyy à HH:mm')
                                                 .format(
                                               DateTime.parse(livraison.created),
                                             ),
@@ -322,4 +381,8 @@ _ShowDialogFun(context, livraison) {
                                   ))
                             ])))));
       });
+}
+
+capitalize(String word) {
+  return word[0].toUpperCase() + word.substring(1).toLowerCase();
 }

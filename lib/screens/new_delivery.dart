@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:nrj_express/api/livraison_service.dart';
 import 'package:nrj_express/components/adresses.dart';
 import 'package:nrj_express/components/categories.dart';
 import 'package:nrj_express/components/choix.dart';
 import 'package:nrj_express/components/record.dart';
 import 'package:nrj_express/models/livraison.dart';
 import 'package:nrj_express/screens/layout.dart';
+import 'home_screen.dart';
 
 class NewDelivery extends StatelessWidget {
   const NewDelivery({Key? key}) : super(key: key);
@@ -23,27 +25,13 @@ class LivraisonCtrl extends StatefulWidget {
   _LivraisonCtrlState createState() => _LivraisonCtrlState();
 }
 
-// double _progress = 0;
-// void startTimer() {
-//   new Timer.periodic(
-//     Duration(seconds: 1),
-//     (Timer timer) => setState(
-//       () {
-//         if (_progress == 1) {
-//           timer.cancel();
-//         } else {
-//           _progress += 0.2;
-//         }
-//       },
-//     ),
-//   );
-// }
 class _LivraisonCtrlState extends State<LivraisonCtrl> {
   late dynamic deliveryStep;
   Livraison livraison = Livraison();
   late String deliveryChoice;
+  bool sending = false;
 
-  dynamic _loadStep(int index) {
+  dynamic _loadStep(int index) async {
     setState(() {
       if (index == 1) {
         deliveryStep = Categories(progress: _loadStep, delivery: livraison);
@@ -55,7 +43,10 @@ class _LivraisonCtrlState extends State<LivraisonCtrl> {
         } else if (deliveryStep.choice == 'audio') {
           deliveryStep = Record(delivery: livraison);
         } else if (deliveryStep.choice == 'call') {
-          // deliveryStep = popUpPostCreation(context);
+          final livraisonSrv = LivraisonService();
+          setState(() {
+            awaitCall(sending, livraisonSrv, livraison, context);
+          });
         }
       }
     });
@@ -108,7 +99,74 @@ class _LivraisonCtrlState extends State<LivraisonCtrl> {
           minHeight: 2),
       SizedBox(
           height: 450,
-          child: Center(child: SingleChildScrollView(child: deliveryStep)))
+          child: Container(
+              constraints: BoxConstraints.expand(),
+              child: Center(child: SingleChildScrollView(child: deliveryStep))))
     ]);
   }
+}
+
+awaitCall(sending, srv, delivery, context) async {
+  sending = true;
+  if (sending) {
+    delivery.status = 'NEW';
+    await srv.create(delivery);
+    sending = false;
+  }
+  popUpPostCreation(context);
+}
+
+popUpPostCreation(context) {
+  return showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+            title: const Center(
+                child: Text(
+              'Demande enregistrée',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.orange,
+                  letterSpacing: 0.75),
+            )),
+            content: Container(
+                constraints: const BoxConstraints(maxHeight: 400),
+                child: Column(
+                  children: [
+                    Container(
+                        margin: const EdgeInsets.only(bottom: 10),
+                        constraints: const BoxConstraints(
+                            maxWidth: double.infinity, maxHeight: 250),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(45),
+                            image: const DecorationImage(
+                                image: AssetImage('images/processing.png'),
+                                fit: BoxFit.contain))),
+                    const Text(
+                      'Nous vous contactons dans un instant. Merci.',
+                      textAlign: TextAlign.center,
+                    )
+                  ],
+                )),
+            actions: [
+              TextButton(
+                  style: ButtonStyle(
+                      foregroundColor:
+                          MaterialStateProperty.all(Colors.blueGrey[700])),
+                  onPressed: () {
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) => HomeScreen()));
+                  },
+                  child: Center(
+                      child: Row(
+                    children: const [
+                      Spacer(),
+                      Text('TERMINER ',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, letterSpacing: 1)),
+                      Icon(Icons.done),
+                      Spacer()
+                    ],
+                  )))
+            ],
+          ));
 }

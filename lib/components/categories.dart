@@ -19,6 +19,7 @@ class Categories extends StatefulWidget {
 class _CategoriesState extends State<Categories> {
   late List<dynamic> categories = [];
   CategorieService categorieSrv = CategorieService();
+  bool loaded = false;
 
   @override
   void initState() {
@@ -30,6 +31,7 @@ class _CategoriesState extends State<Categories> {
     var _categories = await categorieSrv.getAll();
     setState(() {
       categories = _categories;
+      loaded = true;
     });
   }
 
@@ -37,28 +39,34 @@ class _CategoriesState extends State<Categories> {
   Widget build(BuildContext context) {
     return Container(
         padding: const EdgeInsets.all(20),
-        child: Column(children: [
-          ButtonBar(alignment: MainAxisAlignment.center, children: [
-            for (var categorie in categories)
-              Container(
-                  margin: const EdgeInsets.only(bottom: 15, top: 10),
-                  child: ElevatedButton(
-                      style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                              Colors.blue.shade100)),
-                      onPressed: () {
-                        widget.delivery.categorie = categorie['_id'];
-                        widget.progress(widget.index + 1);
-                      },
-                      child: Container(
-                          height: 150,
-                          width: 175,
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  image: AssetImage(
-                                      'images/${categorie["label"]}.png'),
-                                  fit: BoxFit.contain))))),
-          ])
-        ]));
+        child: loaded
+            ? Column(children: [
+                ButtonBar(alignment: MainAxisAlignment.center, children: [
+                  for (var categorie in categories)
+                    Container(
+                        margin: const EdgeInsets.only(bottom: 15, top: 10),
+                        child: ElevatedButton(
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.blue.shade100)),
+                            onPressed: () {
+                              widget.delivery.categorie = categorie['_id'];
+                              widget.progress(widget.index + 1);
+                            },
+                            child: Container(
+                                height: 150,
+                                width: 175,
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: AssetImage(
+                                            'images/${categorie["label"]}.png'),
+                                        fit: BoxFit.contain))))),
+                ])
+              ])
+            : const Center(
+                child: CircularProgressIndicator(
+                color: Colors.orange,
+              )));
   }
 }

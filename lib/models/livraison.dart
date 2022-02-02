@@ -27,6 +27,7 @@ class AllLivraison {
 }
 
 class Livraison {
+  String? id;
   String? client;
   String? lieuDepart;
   String? lieuArrivee;
@@ -38,7 +39,8 @@ class Livraison {
   String created;
 
   Livraison(
-      {this.client,
+      {this.id,
+      this.client,
       this.lieuDepart,
       this.lieuArrivee,
       this.categorie,
@@ -49,6 +51,7 @@ class Livraison {
       this.created = ''});
 
   factory Livraison.fromJson(Map<String, dynamic> Parsedjson) => Livraison(
+        id: Parsedjson["_id"],
         client: Parsedjson["client"],
         lieuDepart: Parsedjson["lieuDepart"],
         lieuArrivee: Parsedjson["lieuArrivee"],
@@ -61,6 +64,7 @@ class Livraison {
       );
 
   Map<String, dynamic> toJson() => {
+        "_id": id,
         "client": client,
         "lieuDepart": lieuDepart,
         "lieuArrivee": lieuArrivee,
